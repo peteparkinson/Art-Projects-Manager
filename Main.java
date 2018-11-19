@@ -17,7 +17,7 @@
  * of materials used and suggested price charged to
  * customer.
  * 
- 		/**
+		/**
 		 * Things to add
 		 * 
 		 * tag for finished product such as "owl burning 8x10",  qty
@@ -31,7 +31,10 @@
 		 * 
 		 * reports page
 		 * 	per type of project - cost / income, total time, average time, quantity sold
+		 *  per medium
 		 * 	per type of material - same
+		 * 
+		 * change desc to notes
 		 * 
 		 */
  ************************************************/
