@@ -17,6 +17,23 @@
  * of materials used and suggested price charged to
  * customer.
  * 
+ 		/**
+		 * Things to add
+		 * 
+		 * tag for finished product such as "owl burning 8x10",  qty
+		 * keep track of duplicates of finished projects 
+		 * 
+		 ***** track cost / income
+		 * 
+		 * reorder points in the future
+		 * 
+		 * track time for projects
+		 * 
+		 * reports page
+		 * 	per type of project - cost / income, total time, average time, quantity sold
+		 * 	per type of material - same
+		 * 
+		 */
  ************************************************/
 
 import javax.swing.JFrame;
