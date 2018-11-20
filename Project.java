@@ -14,6 +14,8 @@
  * - manual charge override
  * - complete / incomplete status
  * - name of customer
+ * - time
+ * - profit
  * - 
  * 
  ************************************************/

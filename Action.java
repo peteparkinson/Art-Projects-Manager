@@ -16,19 +16,20 @@ import javax.swing.JOptionPane;
 public class Action implements ActionListener, KeyListener{
 	
     public void actionPerformed(ActionEvent e) {
+    	
     	if(e.getSource() == GUI.submitMatBtn) {
     		
     		String name = GUI.nameField.getText();
-    		String desc = GUI.descField.getText();
+    		String desc = GUI.notesArea.getText();
     		
-    		int qoh = Integer.parseInt(GUI.QOHField.getText());
+    		int qoh = Integer.parseInt(GUI.qtyField.getText());
     		
     		double cost = Double.parseDouble(GUI.costField.getText());
     	    double extCost = Double.parseDouble(GUI.extCostField.getText());
     	    
     	    Material m = new Material(name, desc, qoh, 0, qoh, cost, extCost);
-    	    
     	}
+    	    
     }
     
 
