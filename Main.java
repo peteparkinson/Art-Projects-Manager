@@ -17,6 +17,42 @@
  * of materials used and suggested price charged to
  * customer.
  * 
+ ************************************************/
+
+import java.awt.EventQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+public class Main {
+    public static void main(String args[]) {
+
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        /* Create and display the form */
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new GUI().setVisible(true);
+            }
+        });
+		
 		/**
 		 * Things to add
 		 * 
@@ -34,22 +70,8 @@
 		 *  per medium
 		 * 	per type of material - same
 		 * 
-		 * change desc to notes
 		 * 
 		 */
- ************************************************/
-
-import javax.swing.JFrame;
-
-public class Main {
-	public static void main(String[] args){
-		
-		//opens GUI
-		GUI openGUI = new GUI();
-		openGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		openGUI.setSize(400, 300);
-		openGUI.setVisible(true);
-		//openGUI.setJMenuBar(GUI.menuBar);
 		
 	}
 }
