@@ -70,7 +70,18 @@ public class Main {
 		 *  per medium
 		 * 	per type of material - same
 		 * 
-		 * change desc to notes
+		 * "customer" tab with buyer info
+		 * 
+		 * invoice tab
+		 * 
+		 * company name
+		 * date
+		 * customer
+		 * customer's address
+		 * project name
+		 * quantity
+		 * cost
+		 * message
 		 * 
 		 */
 		
