@@ -56,14 +56,7 @@ public class Main {
 		/**
 		 * Things to add
 		 * 
-		 * tag for finished product such as "owl burning 8x10",  qty
-		 * keep track of duplicates of finished projects 
-		 * 
-		 ***** track cost / income
-		 * 
 		 * reorder points in the future
-		 * 
-		 * track time for projects
 		 * 
 		 * reports page
 		 * 	per type of project - cost / income, total time, average time, quantity sold
@@ -84,6 +77,18 @@ public class Main {
 		 * message
 		 * 
 		 */
+        
+        /*
+	      //get current date time with Date()
+	        Date date = new Date();
+	        System.out.println(dateFormat.format(date));
+	        jTextField3.setText(dateFormat.format(date));
+	     get current date time with Calendar()
+	
+	     //get current date time with Calendar()
+	        Calendar cal = Calendar.getInstance();
+	        jTextField3.setText(dateFormat.format(cal.getTime()));
+	    */
 		
 	}
 }

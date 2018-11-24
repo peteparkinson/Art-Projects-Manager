@@ -19,12 +19,18 @@ public class Action implements ActionListener, KeyListener{
 	
     public void actionPerformed(ActionEvent e) {
     	
-    	if(e.getSource() == GUI.submitMatBtn) {
+    	if(e.getSource() == GUI.MTSubmitBtn) {
+    		submitNewMaterial();
+    	}
+    	
+    }
+    
 
-		String name = GUI.nameField.getText();
-		int qoh = Integer.parseInt(GUI.qtyField.getText());
-		double cost = Double.parseDouble(GUI.costField.getText());
-		String notes = GUI.notesArea.getText();
+	private void submitNewMaterial() {
+		String name = GUI.MTNameField.getText();
+		int qoh = Integer.parseInt(GUI.MTQtyField.getText());
+		double cost = Double.parseDouble(GUI.MTCostField.getText());
+		String notes = GUI.MTNotesArea.getText();
     		
 		Material m = new Material(name, qoh, cost, notes);
     	    
@@ -33,16 +39,9 @@ public class Action implements ActionListener, KeyListener{
 			} catch (IOException exception) {
 				exception.printStackTrace();
 			}
-    	}
-    	
-    	if(e.getSource() == GUI.plusBtn){
-    		
-    	}
-    	if(e.getSource() == GUI.minusBtn){
-    		
-    	}
-    }
-    
+		
+	}
+
 
 	public void keyPressed(KeyEvent e) {
 		
