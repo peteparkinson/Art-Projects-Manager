@@ -169,6 +169,9 @@ public class GUI extends JFrame {
 
         jtp.setFocusable(false);
 
+        //===============================
+        //Materials tab element properties
+        //===============================
         MTNewBtn.setText("New");
         MTNewBtn.addActionListener(new Action());
 
@@ -248,6 +251,11 @@ public class GUI extends JFrame {
         });
         MTUsedInScrollPane.setViewportView(MTUsedInList);
 
+
+        //===============================
+        //Materials tab draw
+        //===============================
+        
         GroupLayout materialsPanelLayout = new GroupLayout(materialsPanel);
         materialsPanel.setLayout(materialsPanelLayout);
         materialsPanelLayout.setHorizontalGroup(
@@ -359,6 +367,11 @@ public class GUI extends JFrame {
 
         jtp.addTab("Materials", materialsPanel);
 
+
+        //===============================
+        //Projects tab element properties
+        //===============================
+        
         projectsPanel.setFocusable(false);
 
         PTOpenProLabel.setText("Open Projects:");
@@ -441,6 +454,10 @@ public class GUI extends JFrame {
         });
         PTClosedScrollPane.setViewportView(PTClosedProList);
 
+        //===============================
+        //Projects tab draw
+        //===============================
+        
         GroupLayout projectsPanelLayout = new GroupLayout(projectsPanel);
         projectsPanel.setLayout(projectsPanelLayout);
         projectsPanelLayout.setHorizontalGroup(
@@ -563,6 +580,10 @@ public class GUI extends JFrame {
 
         jtp.addTab("Projects", projectsPanel);
 
+        //===============================
+        //New Projects tab element properties
+        //===============================
+        
         NPTNameLabel.setText("Name:");
         NPTNameLabel.setFocusable(false);
 
@@ -631,6 +652,10 @@ public class GUI extends JFrame {
 
         NPTSubmitBtn.setText("Submit");
 
+        //===============================
+        //New Projects tab draw
+        //===============================
+        
         GroupLayout newProjectPanelLayout = new GroupLayout(newProjectPanel);
         newProjectPanel.setLayout(newProjectPanelLayout);
         newProjectPanelLayout.setHorizontalGroup(
@@ -730,6 +755,10 @@ public class GUI extends JFrame {
 
         jtp.addTab("New Project", newProjectPanel);
 
+        //===============================
+        // Reports tab element properties
+        //===============================
+        
         reportsPanel.setFocusable(false);
 
         RTGenerateComboBox.setEditable(true);
@@ -782,7 +811,11 @@ public class GUI extends JFrame {
         RTEquationLabel.setText("(rev. - exp.) / net sales");
 
         RTGenerateBtn.setText("Generate");
-
+        
+        //===============================
+        // Reports tab draw
+        //===============================
+        
         GroupLayout reportsPanelLayout = new GroupLayout(reportsPanel);
         reportsPanel.setLayout(reportsPanelLayout);
         reportsPanelLayout.setHorizontalGroup(
@@ -869,6 +902,10 @@ public class GUI extends JFrame {
 
         jtp.addTab("Reports", reportsPanel);
 
+        //===============================
+        // Customer tab element properties
+        //===============================
+        
         CTCustomersLabel.setText("Customers:");
         CTCustomersLabel.setFocusable(false);
 
@@ -910,6 +947,10 @@ public class GUI extends JFrame {
         });
         CTProjectsScrollPane.setViewportView(CTProjectsList);
 
+        //===============================
+        // Customer tab draw
+        //===============================
+        
         GroupLayout customersPanelLayout = new GroupLayout(customersPanel);
         customersPanel.setLayout(customersPanelLayout);
         customersPanelLayout.setHorizontalGroup(
@@ -977,6 +1018,10 @@ public class GUI extends JFrame {
 
         jtp.addTab("Customers", customersPanel);
 
+        //===============================
+        // Invoice tab element properties
+        //===============================
+        
         ITFinishLabel.setText("Projects to Finish:");
 
         ITFinishList.setModel(new AbstractListModel<String>() {
@@ -1010,6 +1055,10 @@ public class GUI extends JFrame {
         ITMessageArea.setText("Message:");
         ITMessageScrollPane.setViewportView(ITMessageArea);
 
+        //===============================
+        // Invoice tab draw
+        //===============================
+        
         GroupLayout invoicePanelLayout = new GroupLayout(invoicePanel);
         invoicePanel.setLayout(invoicePanelLayout);
         invoicePanelLayout.setHorizontalGroup(
@@ -1086,6 +1135,7 @@ public class GUI extends JFrame {
         pack();
     }
     
+    /*
     private void MTNewBtnActionPerformed(Action evt) {             
     }                                        
 
@@ -1105,35 +1155,9 @@ public class GUI extends JFrame {
     }                                          
 
     private void NPTTypeComboBoxActionPerformed(Action evt) {     
-    }                                               
-    
-    public static void main(String args[]) {
-
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //Init GUI
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
-    }
-
+    }                          
+    */
+                     
     //Declarations
     //Tabbed pane
     private JTabbedPane jtp;

@@ -19,8 +19,53 @@ public class Action implements ActionListener, KeyListener{
 	
     public void actionPerformed(ActionEvent e) {
     	
+    	if(e.getSource() == GUI.CTNewBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.CTSubmitBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.ITFinishBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.MTNewBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.MTEditBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.MTDeleteBtn) {
+
+    	}    	
     	if(e.getSource() == GUI.MTSubmitBtn) {
     		submitNewMaterial();
+    	}    	
+    	if(e.getSource() == GUI.NPTAddBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.NPTRemoveBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.NPTEditProBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.NPTSubmitBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.PTCloseBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.PTReopenBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.PTAutoChargeBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.PTManChargeBtn) {
+
+    	}    	
+    	if(e.getSource() == GUI.RTGenerateBtn) {
+
     	}
     	
     }

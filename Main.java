@@ -46,7 +46,7 @@ public class Main {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        /* Create and display the form */
+        //Init GUI
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GUI().setVisible(true);
