@@ -26,12 +26,18 @@ public class Material {
 	
 	private String name;
 	private String notes;
+	private int typeIndex;
 	private int qtyOnHand;
 	private int qtyInUse;
 	private int qtyAvail;
 	private double cost;
 	private double extCost;
 	private ArrayList<Project> projects;
+	
+	//default constructor
+	public Material(){
+		
+	}
 	
 	/*************************************************
 	 * constructor
@@ -44,16 +50,22 @@ public class Material {
 	 *  extCost
 	 *  relProjects
 	 */
-	public Material(String name, int qtyOnHand, double cost, String notes) {
+	public Material(String name, int qtyOnHand, double cost, int typeIndex, String notes) {
 		this.name = name;
 		this.qtyOnHand = qtyOnHand;
 		this.cost  = cost;
+		this.typeIndex  = typeIndex;
 		this.notes = notes;
 		this.qtyInUse = 0;
 		this.qtyAvail = this.qtyOnHand - this.qtyInUse;
 		this.extCost  = this.cost * this.qtyOnHand;
 		this.projects = new ArrayList<Project>();
 		
+	}
+	
+	//List constructor
+	public Material(String name) {
+		this.name = name;		
 	}
 	
 	//getters
@@ -63,7 +75,7 @@ public class Material {
 	public double getCost() { 
 		return cost; 
 	}
-	public int getQtyOnHand() { 
+	public int getQOH() { 
 		return qtyOnHand; 
 	}
 	public String getNotes() { 
@@ -77,6 +89,9 @@ public class Material {
 	}
 	public double getExtCost() { 
 		return extCost; 
+	}
+	public int getTypeIndex() {
+		return typeIndex;
 	}
 	
 	//setters
@@ -101,10 +116,17 @@ public class Material {
 	public void setExtCost(double extCost) { 
 		this.extCost = extCost; 
 	}
+	public void setTypeIndex(int typeIndex) {
+		this.typeIndex = typeIndex; 
+	}
+	
 	//add material to list of related projects
 	public void addToProject(Project project){ 
 		this.projects.add(project); 
 	}
-	
+
+	public String toString() { 
+		return name; 
+	}
 	
 }

@@ -29,6 +29,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main {
     public static void main(String args[]) {
 
+    	//if unable to verify and write file system, close program
+        if(!FileControl.validateDirectories()) {
+        	return;
+        }
+        
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -52,6 +57,8 @@ public class Main {
                 new GUI().setVisible(true);
             }
         });
+        
+        //FileControl.loadMaterialsLists();
 		
 		/**
 		 * Things to add

@@ -1,5 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.util.logging.*;
 
 
@@ -193,13 +196,16 @@ public class GUI extends JFrame {
         MTNotesArea.setRows(5);
         MTNotesArea.setName(""); // NOI18N
         MTNotesArea.setNextFocusableComponent(MTSubmitBtn);
+        MTNotesArea.setEditable(false);
+        MTNotesArea.setEnabled(false);
+        
         MTNotesScrollPane.setViewportView(MTNotesArea);
-
+        
         MTNotesLabel.setText("Notes:");
         MTNotesLabel.setFocusable(false);
 
         MTTypeComboBox.setEditable(true);
-        MTTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        MTTypeComboBox.setModel(new DefaultComboBoxModel<>(ListData.materialTypes));
 
         MTTypeLabel.setText("Type:");
         MTTypeLabel.setFocusable(false);
@@ -208,8 +214,10 @@ public class GUI extends JFrame {
         MTExtCostLabel.setFocusable(false);
 
         MTExtCostField.setEditable(false);
+        MTExtCostField.setEnabled(false);
 
         MTCostField.setNextFocusableComponent(MTTypeComboBox);
+        MTCostField.setEnabled(false);
 
         MTCostLabel.setText("Cost:");
         MTCostLabel.setFocusable(false);
@@ -227,28 +235,52 @@ public class GUI extends JFrame {
         MTNameLabel.setFocusable(false);
 
         MTNameField.setNextFocusableComponent(MTQtyField);
+        MTNameField.setEnabled(false);
 
         MTQtyField.setNextFocusableComponent(MTCostField);
+        MTQtyField.setEnabled(false);
 
         MTUsingField.setEditable(false);
+        MTUsingField.setEnabled(false);
 
         MTAvailField.setEditable(false);
+        MTAvailField.setEnabled(false);
+        
+        MTTypeComboBox.setEnabled(false);
 
-        MTMaterialsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        /**************************************************
+         * Selection Listener for materials list
+         *************************************************/
+        MTMaterialsList.setModel(materialsModel);
+        MTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        MTMaterialsList.addListSelectionListener(
+		        new ListSelectionListener()
+		        {
+		            public void valueChanged(ListSelectionEvent event){
+		        		if (GUI.MTMaterialsList.getSelectedIndex() != -1){
+		        			Material e = GUI.MTMaterialsList.getSelectedValue();
+		            		MTNameField.setText(e.getName());
+		            		MTQtyField.setText(String.valueOf(e.getQOH()));
+		            		MTCostField.setText(String.valueOf(e.getCost()));
+		            		MTExtCostField.setText(String.valueOf(e.getQOH() * e.getCost()));
+		            		MTAvailField.setText(String.valueOf(e.getQOH()));
+		            		MTTypeComboBox.setSelectedItem(ListData.materialTypes[e.getTypeIndex()]);
+		            		MTUsingField.setText("0");
+		            		MTNotesArea.setText(e.getNotes());
+		        		}
+		            }
+		        });
+		        
+
+        
         MTMaterialsList.setMaximumSize(new Dimension(33, 75));
         MTMaterialsList.setMinimumSize(new Dimension(33, 75));
         MTMaterialsList.setPreferredSize(new Dimension(33, 75));
         MTMaterialsScrollPane.setViewportView(MTMaterialsList);
 
-        MTUsedInList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        MTUsedInList.setModel(projectsModel);
+        MTUsedInList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         MTUsedInScrollPane.setViewportView(MTUsedInList);
 
 
@@ -433,25 +465,19 @@ public class GUI extends JFrame {
         PTCustomerField.setEditable(false);
         PTCustomerField.setHorizontalAlignment(JTextField.RIGHT);
 
-        PTOpenProList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        PTOpenProList.setModel(projectsModel);
+        PTOpenProList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         PTOpenScrollPane.setViewportView(PTOpenProList);
 
-        PTMaterialsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        PTMaterialsList.setModel(materialsModel);
+        PTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         PTMatScrollPane.setViewportView(PTMaterialsList);
-
-        PTClosedProList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        
+        PTClosedProList.setModel(projectsModel);
+        PTClosedProList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         PTClosedScrollPane.setViewportView(PTClosedProList);
 
         //===============================
@@ -590,21 +616,17 @@ public class GUI extends JFrame {
         NPTCustomerLabel.setText("Customer:");
         NPTCustomerLabel.setFocusable(false);
 
-        NPTMaterialsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        NPTMaterialsList.setModel(materialsModel);
+        NPTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         NPTMatScrollPane.setViewportView(NPTMaterialsList);
 
         NPTChooseMatLabel.setText("Choose Materials:");
         NPTChooseMatLabel.setFocusable(false);
 
-        NPTDedicateList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        NPTDedicateList.setModel(materialsModel);
+        NPTDedicateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         NPTDedicateScrollPane.setViewportView(NPTDedicateList);
 
         NPTNotesLabel.setText("Notes:");
@@ -628,7 +650,7 @@ public class GUI extends JFrame {
         NPTTypeLabel.setFocusable(false);
 
         NPTCustomerComboBox.setEditable(true);
-        NPTCustomerComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        //NPTCustomerComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         ElunaMaeArtsLabel.setFont(new Font("Palace Script MT", 3, 48)); // NOI18N
         ElunaMaeArtsLabel.setText("Eluna Mae Arts");
@@ -641,11 +663,9 @@ public class GUI extends JFrame {
 
         NPTProjectsLabel.setText("Open Projects:");
 
-        NPTProjectsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        NPTProjectsList.setModel(projectsModel);
+        NPTProjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         NPTProjectsScrollPane.setViewportView(NPTProjectsList);
 
         NPTEditProBtn.setText("Edit Project");
@@ -761,8 +781,10 @@ public class GUI extends JFrame {
         
         reportsPanel.setFocusable(false);
 
-        RTGenerateComboBox.setEditable(true);
-        RTGenerateComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        RTGenerateComboBox.setEditable(false);
+        RTGenerateComboBox.addItem("");
+        RTGenerateComboBox.addItem("Materials");
+        RTGenerateComboBox.addItem("Projects");
 
         RTGenLabel.setText("Generate Report for:");
         RTGenLabel.setFocusable(false);
@@ -770,8 +792,8 @@ public class GUI extends JFrame {
         RTTypeLabel.setText("Type:");
         RTTypeLabel.setFocusable(false);
 
-        RTTypeComboBox.setEditable(true);
-        RTTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        RTTypeComboBox.setEditable(false);
+        RTTypeComboBox.addItem("");
 
         RTMarginLabl.setText("Profit Margin:");
         RTMarginLabl.setFocusable(false);
@@ -908,12 +930,14 @@ public class GUI extends JFrame {
         
         CTCustomersLabel.setText("Customers:");
         CTCustomersLabel.setFocusable(false);
-
+        
+        /*
         CTCustomersList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        */
         CTCustomersScrollPane.setViewportView(CTCustomersList);
 
         CTNameLabel.setText("Name:");
@@ -933,18 +957,20 @@ public class GUI extends JFrame {
         CTNameField.setEditable(false);
 
         CTPhoneField.setEditable(false);
-        CTPhoneField.setText("jTextField4");
+        CTPhoneField.setText("");
 
         CTAddressField.setEditable(false);
 
         CTProjectsLabel.setText("Projects:");
         CTProjectsLabel.setFocusable(false);
 
+        /*
         CTProjectsList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        */
         CTProjectsScrollPane.setViewportView(CTProjectsList);
 
         //===============================
@@ -1023,12 +1049,13 @@ public class GUI extends JFrame {
         //===============================
         
         ITFinishLabel.setText("Projects to Finish:");
-
+        /*
         ITFinishList.setModel(new AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        */
         ITFinishScrollPane.setViewportView(ITFinishList);
 
         ITFinishBtn.setText("Finish");
@@ -1133,6 +1160,10 @@ public class GUI extends JFrame {
         );
 
         pack();
+        
+
+		materialsModel.addElement(new Material("test material", 1, 35, 1, "notes here"));
+		
     }
     
     /*
@@ -1178,8 +1209,8 @@ public class GUI extends JFrame {
     private JLabel CTNameLabel;
     private JLabel CTPhoneLabel;
     private JLabel CTProjectsLabel;
-    static JList<String> CTCustomersList;
-    static JList<String> CTProjectsList;
+    static JList<Customer> CTCustomersList;
+    static JList<Project> CTProjectsList;
     private JScrollPane CTCustomersScrollPane;
     private JScrollPane CTProjectsScrollPane;
     static JTextField CTAddressField;
@@ -1197,7 +1228,7 @@ public class GUI extends JFrame {
     static JLabel ITQtyLabel;
     static JLabel ITTodayLabel;
     static JLabel ITFinishLabel;
-    static JList<String> ITFinishList;
+    static JList<Project> ITFinishList;
     private JScrollPane ITFinishScrollPane;
     private JScrollPane ITMessageScrollPane;
     static JTextArea ITMessageArea;
@@ -1218,8 +1249,8 @@ public class GUI extends JFrame {
     private JLabel MTSelectLabel;
     private JLabel MTTypeLabel;
     private JLabel MTUsingLabel;
-    static JList<String> MTMaterialsList;
-    static JList<String> MTUsedInList;
+    static JList<Material> MTMaterialsList;
+    static JList<Project> MTUsedInList;
     private JScrollPane MTMaterialsScrollPane;
     private JScrollPane MTNotesScrollPane;
     private JScrollPane MTUsedInScrollPane;
@@ -1236,7 +1267,7 @@ public class GUI extends JFrame {
     static JButton NPTEditProBtn;
     static JButton NPTRemoveBtn;
     static JButton NPTSubmitBtn;
-    static JComboBox<String> NPTCustomerComboBox;
+    static JComboBox<Customer> NPTCustomerComboBox;
     static JComboBox<String> NPTTypeComboBox;
     private JLabel ElunaMaeArtsLabel;
     private JLabel NPTChooseMatLabel;
@@ -1246,9 +1277,9 @@ public class GUI extends JFrame {
     private JLabel NPTNotesLabel;
     private JLabel NPTProjectsLabel;
     private JLabel NPTTypeLabel;
-    static JList<String> NPTDedicateList;
-    static JList<String> NPTMaterialsList;
-    static JList<String> NPTProjectsList;
+    static JList<Material> NPTDedicateList;
+    static JList<Material> NPTMaterialsList;
+    static JList<Project> NPTProjectsList;
     private JScrollPane NPTDedicateScrollPane;
     private JScrollPane NPTMatScrollPane;
     private JScrollPane NPTNotesScrollPane;
@@ -1273,9 +1304,9 @@ public class GUI extends JFrame {
     private JLabel PTOpenProLabel;
     private JLabel PTProfitLabel;
     private JLabel PTTotalLabel;
-    static JList<String> PTClosedProList;
-    static JList<String> PTMaterialsList;
-    static JList<String> PTOpenProList;
+    static JList<Project> PTClosedProList;
+    static JList<Material> PTMaterialsList;
+    static JList<Project> PTOpenProList;
     private JScrollPane PTClosedScrollPane;
     private JScrollPane PTMatScrollPane;
     private JScrollPane PTOpenScrollPane;
@@ -1311,5 +1342,8 @@ public class GUI extends JFrame {
     static JTextField RTSoldField;
     static JTextField RTTotalCostField;
     static JTextField RTTotalTimeField;
+
+	static DefaultListModel<Material> materialsModel  = new DefaultListModel<Material>();
+	static DefaultListModel<Project>  projectsModel = new DefaultListModel<Project>();
           
 }

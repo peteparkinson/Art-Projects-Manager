@@ -12,8 +12,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
 
 public class Action implements ActionListener, KeyListener{
 	
@@ -30,6 +35,17 @@ public class Action implements ActionListener, KeyListener{
     	}    	
     	if(e.getSource() == GUI.MTNewBtn) {
 
+            GUI.MTNotesArea.setEnabled(true);
+            GUI.MTExtCostField.setEnabled(true);
+            GUI.MTCostField.setEnabled(true);
+            GUI.MTNameField.setEnabled(true);
+            GUI.MTQtyField.setEnabled(true);
+            GUI.MTUsingField.setEnabled(true);
+            GUI.MTAvailField.setEnabled(true);
+            GUI.MTTypeComboBox.setEnabled(true);
+            GUI.MTSubmitBtn.setEnabled(true);
+            GUI.MTDeleteBtn.setEnabled(false);
+            
     	}    	
     	if(e.getSource() == GUI.MTEditBtn) {
 
@@ -70,24 +86,6 @@ public class Action implements ActionListener, KeyListener{
     	
     }
     
-
-	private void submitNewMaterial() {
-		String name = GUI.MTNameField.getText();
-		int qoh = Integer.parseInt(GUI.MTQtyField.getText());
-		double cost = Double.parseDouble(GUI.MTCostField.getText());
-		String notes = GUI.MTNotesArea.getText();
-    		
-		Material m = new Material(name, qoh, cost, notes);
-    	    
-    	    try {
-				FileControl.createMaterialFile(m);
-			} catch (IOException exception) {
-				exception.printStackTrace();
-			}
-		
-	}
-
-
 	public void keyPressed(KeyEvent e) {
 		
 	}
@@ -98,7 +96,37 @@ public class Action implements ActionListener, KeyListener{
 
 	public void keyTyped(KeyEvent e) {
 		
-		
 	}
     
+
+	private void submitNewMaterial() {
+		String name = GUI.MTNameField.getText();
+		int qoh = Integer.parseInt(GUI.MTQtyField.getText());
+		double cost = Double.parseDouble(GUI.MTCostField.getText());
+		String notes = GUI.MTNotesArea.getText();
+		int type = GUI.MTTypeComboBox.getSelectedIndex();
+    		
+		Material m = new Material(name, qoh, cost, type, notes);
+		
+		//add material to global list of all materials
+		ListData.materials.add(m);
+		
+		//update on-screen lists
+		updateList(ListData.materials);
+		
+		//write material to file
+	    try {
+			FileControl.createMaterialFile(m);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		
+	}
+
+	private void updateList(ArrayList<Material> materials) {
+		
+		
+	}
+	
+	
 }
