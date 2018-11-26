@@ -30,9 +30,12 @@ public class Main {
     public static void main(String args[]) {
 
     	//if unable to verify and write file system, close program
-        if(!FileControl.validateDirectories()) {
+        if(!FileControl.initDirectories()) {
         	return;
         }
+        
+        //load materials
+        FileControl.loadMaterialsLists();
         
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -57,33 +60,6 @@ public class Main {
                 new GUI().setVisible(true);
             }
         });
-        
-        //FileControl.loadMaterialsLists();
-		
-		/**
-		 * Things to add
-		 * 
-		 * reorder points in the future
-		 * 
-		 * reports page
-		 * 	per type of project - cost / income, total time, average time, quantity sold
-		 *  per medium
-		 * 	per type of material - same
-		 * 
-		 * "customer" tab with buyer info
-		 * 
-		 * invoice tab
-		 * 
-		 * company name
-		 * date
-		 * customer
-		 * customer's address
-		 * project name
-		 * quantity
-		 * cost
-		 * message
-		 * 
-		 */
         
         /*
 	      //get current date time with Date()

@@ -24,6 +24,7 @@ public class Material {
 
 	public static ArrayList<Material> loadedMaterials;
 	
+	private String serial;
 	private String name;
 	private String notes;
 	private int typeIndex;
@@ -50,7 +51,8 @@ public class Material {
 	 *  extCost
 	 *  relProjects
 	 */
-	public Material(String name, int qtyOnHand, double cost, int typeIndex, String notes) {
+	public Material(String serial, String name, int qtyOnHand, double cost, int typeIndex, String notes) {
+		this.serial = serial;
 		this.name = name;
 		this.qtyOnHand = qtyOnHand;
 		this.cost  = cost;
@@ -69,6 +71,11 @@ public class Material {
 	}
 	
 	//getters
+	public String getSerial() {
+		//increment serial numbers
+		ListData.materialSerialNumber = String.valueOf(Integer.parseInt(ListData.materialSerialNumber) + 1);
+		return serial;
+	}
 	public String getName() { 
 		return name; 
 	}
@@ -95,13 +102,16 @@ public class Material {
 	}
 	
 	//setters
+	public void setSerial(String serial) {
+		this.serial = serial;
+	}
 	public void setName(String name) {
 		this.name = name; 
 	}
 	public void setCost(double cost) { 
 		this.cost = cost; 
 	}
-	public void setQtyOnHand(int qtyOnHand) { 
+	public void setQOH(int qtyOnHand) { 
 		this.qtyOnHand = qtyOnHand; 
 	}
 	public void setNotes(String notes) { 
@@ -128,5 +138,7 @@ public class Material {
 	public String toString() { 
 		return name; 
 	}
+
+
 	
 }

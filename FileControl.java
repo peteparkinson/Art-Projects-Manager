@@ -7,15 +7,25 @@
  * 
  ************************************************/
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class FileControl {
+	
+	static Path APMPath 	  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager");
+	static Path materialsPath = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Materials");
+	static Path projectsPath  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Projects");
+	static Path customersPath = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Customers");
+	static Path invoicesPath  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Invoices");
 	
 	public static void createMaterialFile(Material m) throws IOException{
 
@@ -38,11 +48,14 @@ public class FileControl {
 		/*****************************
 		 * Write content by line:
 		 *  - name
+		 *  - type
 		 *  - quantity
 		 *  - cost
 		 *  - notes
 		 */
-		
+
+		bw.write(m.getSerial());
+        bw.newLine();
 		bw.write(m.getName());
         bw.newLine();
 		bw.write(ListData.materialTypes[m.getTypeIndex()]);
@@ -56,15 +69,94 @@ public class FileControl {
 		
 	}
 	
+	//loads material files into RAM, displays on GUI lists
 	public static void loadMaterialsLists(){
-		File folder = new File("C://Tools//workspace//Inventory System//Materials");
+		File folder = new File(String.valueOf(materialsPath));
 		File[] listOfFiles = folder.listFiles();
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		        System.out.println(file.getName());
+		    	try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String line = null;
+					Material m = new Material();
+
+					line = br.readLine();
+					m.setSerial(line);
+					
+					line = br.readLine();
+					m.setName(line);
+
+					line = br.readLine();
+					m.setTypeIndex(Arrays.asList(ListData.materialTypes).indexOf(line));
+					
+					line = br.readLine();
+					m.setQOH(Integer.parseInt(line));
+
+					line = br.readLine();
+					m.setCost(Double.parseDouble(line));
+
+					line = br.readLine();
+					m.setNotes(line);
+					
+					br.close();
+					
+					//add material to global arraylist
+					ListData.materials.add(m);
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					System.out.println("Cannot find file " + file);
+				} catch (IOException e) {
+					System.out.println("Cannot read from file " + file);
+					e.printStackTrace();
+				}
+				//display global materials list on GUI lists
+
+				Action.updateMatList(ListData.materials, GUI.allMaterialsModel);
+		        System.out.println();
 		    }
 		}
+	}
+	
+
+	//delete objects respective file
+	public static void deleteMatFile(Material m) {
+		File folder = new File(String.valueOf(materialsPath));
+		File[] listOfFiles = folder.listFiles();
+		folder = new File(String.valueOf(materialsPath));
+	
+
+		for (File file : listOfFiles) {
+		    if (file.isFile()) {
+		    	try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String line = br.readLine();
+
+					//finds the material's serial number in the file
+					if(m.getSerial().equals(line)) {
+						System.out.println("deleted " + String.valueOf(file));
+						br.close();
+						file.delete();
+						return;
+						
+					}
+					
+					br.close();
+					
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					System.out.println("Cannot find file " + file);
+				} catch (IOException e) {
+					System.out.println("Cannot read from file " + file);
+					e.printStackTrace();
+				}
+
+		    }
+		}
+		
+		
 	}
 	
 	public static void loadProjects(){
@@ -76,7 +168,7 @@ public class FileControl {
 		BufferedWriter bw = null;
 		FileWriter writer = null;
 		File f = new File(
-				"projectsPath" + p.getName() + ".txt");
+				projectsPath + "\\" +  p.getName() + ".txt");
 		  
 		//Create the file
 		if (f.createNewFile())
@@ -96,13 +188,7 @@ public class FileControl {
 		
 	}
 
-	public static void initDirectory() {
-		// Create a directory; all non-existent ancestor directories are
-		// automatically created
-
-	}
-
-	public static boolean validateDirectories() {
+	public static boolean initDirectories() {
 
 		//validate main directory exists
 		if (Files.exists(APMPath)) {
@@ -180,10 +266,6 @@ public class FileControl {
 		}
 		return true;
 	}
+
 	
-	static Path APMPath 	  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager");
-	static Path materialsPath = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Materials");
-	static Path projectsPath  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Projects");
-	static Path customersPath = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Customers");
-	static Path invoicesPath  = Paths.get("C:\\Users\\Public\\Documents\\Art Projects Manager\\Invoices");
 }

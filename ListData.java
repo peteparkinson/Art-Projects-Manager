@@ -9,11 +9,20 @@ import java.util.ArrayList;
 public class ListData {
 
 	public static ArrayList<Material> materials = new ArrayList<Material>();
+	public static ArrayList<Material> dedicate  = new ArrayList<Material>();
+	public static ArrayList<Project> openProjects     = new ArrayList<Project>();
+	public static ArrayList<Project> closedProjects   = new ArrayList<Project>();
+	public static ArrayList<Project> projectsToFinish = new ArrayList<Project>();
+	public static ArrayList<Customer> customers = new ArrayList<Customer>();
+	
+	public static String materialSerialNumber = "0";
 	
 	//types of materials
 	public static String[] materialTypes = new String[] 
 			{	
 				"",
+				"Ceramic",
+				"Clay",
 				"Cloth",
 				"Glass",
 				"Metal",

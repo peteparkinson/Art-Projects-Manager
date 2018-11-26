@@ -196,7 +196,6 @@ public class GUI extends JFrame {
         MTNotesArea.setRows(5);
         MTNotesArea.setName(""); // NOI18N
         MTNotesArea.setNextFocusableComponent(MTSubmitBtn);
-        MTNotesArea.setEditable(false);
         MTNotesArea.setEnabled(false);
         
         MTNotesScrollPane.setViewportView(MTNotesArea);
@@ -218,6 +217,7 @@ public class GUI extends JFrame {
 
         MTCostField.setNextFocusableComponent(MTTypeComboBox);
         MTCostField.setEnabled(false);
+        MTCostField.addKeyListener(new Action());
 
         MTCostLabel.setText("Cost:");
         MTCostLabel.setFocusable(false);
@@ -239,6 +239,7 @@ public class GUI extends JFrame {
 
         MTQtyField.setNextFocusableComponent(MTCostField);
         MTQtyField.setEnabled(false);
+        MTQtyField.addKeyListener(new Action());
 
         MTUsingField.setEditable(false);
         MTUsingField.setEnabled(false);
@@ -251,13 +252,14 @@ public class GUI extends JFrame {
         /**************************************************
          * Selection Listener for materials list
          *************************************************/
-        MTMaterialsList.setModel(materialsModel);
+        MTMaterialsList.setModel(allMaterialsModel);
         MTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         MTMaterialsList.addListSelectionListener(
 		        new ListSelectionListener()
 		        {
 		            public void valueChanged(ListSelectionEvent event){
 		        		if (GUI.MTMaterialsList.getSelectedIndex() != -1){
+		        			
 		        			Material e = GUI.MTMaterialsList.getSelectedValue();
 		            		MTNameField.setText(e.getName());
 		            		MTQtyField.setText(String.valueOf(e.getQOH()));
@@ -278,7 +280,7 @@ public class GUI extends JFrame {
         MTMaterialsList.setPreferredSize(new Dimension(33, 75));
         MTMaterialsScrollPane.setViewportView(MTMaterialsList);
 
-        MTUsedInList.setModel(projectsModel);
+        MTUsedInList.setModel(usedInProModel);
         MTUsedInList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         MTUsedInScrollPane.setViewportView(MTUsedInList);
@@ -465,17 +467,17 @@ public class GUI extends JFrame {
         PTCustomerField.setEditable(false);
         PTCustomerField.setHorizontalAlignment(JTextField.RIGHT);
 
-        PTOpenProList.setModel(projectsModel);
+        PTOpenProList.setModel(openProModel);
         PTOpenProList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         PTOpenScrollPane.setViewportView(PTOpenProList);
 
-        PTMaterialsList.setModel(materialsModel);
+        PTMaterialsList.setModel(usedMaterialsModel);
         PTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         PTMatScrollPane.setViewportView(PTMaterialsList);
         
-        PTClosedProList.setModel(projectsModel);
+        PTClosedProList.setModel(closedProModel);
         PTClosedProList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         PTClosedScrollPane.setViewportView(PTClosedProList);
@@ -616,7 +618,7 @@ public class GUI extends JFrame {
         NPTCustomerLabel.setText("Customer:");
         NPTCustomerLabel.setFocusable(false);
 
-        NPTMaterialsList.setModel(materialsModel);
+        NPTMaterialsList.setModel(allMaterialsModel);
         NPTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         NPTMatScrollPane.setViewportView(NPTMaterialsList);
@@ -624,7 +626,7 @@ public class GUI extends JFrame {
         NPTChooseMatLabel.setText("Choose Materials:");
         NPTChooseMatLabel.setFocusable(false);
 
-        NPTDedicateList.setModel(materialsModel);
+        NPTDedicateList.setModel(dedicateMatModel);
         NPTDedicateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         NPTDedicateScrollPane.setViewportView(NPTDedicateList);
@@ -650,9 +652,8 @@ public class GUI extends JFrame {
         NPTTypeLabel.setFocusable(false);
 
         NPTCustomerComboBox.setEditable(true);
-        //NPTCustomerComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        ElunaMaeArtsLabel.setFont(new Font("Palace Script MT", 3, 48)); // NOI18N
+        ElunaMaeArtsLabel.setFont(new Font("Palace Script MT", 3, 48));
         ElunaMaeArtsLabel.setText("Eluna Mae Arts");
         ElunaMaeArtsLabel.setEnabled(false);
         ElunaMaeArtsLabel.setFocusable(false);
@@ -663,7 +664,7 @@ public class GUI extends JFrame {
 
         NPTProjectsLabel.setText("Open Projects:");
 
-        NPTProjectsList.setModel(projectsModel);
+        NPTProjectsList.setModel(openProModel);
         NPTProjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         NPTProjectsScrollPane.setViewportView(NPTProjectsList);
@@ -931,13 +932,9 @@ public class GUI extends JFrame {
         CTCustomersLabel.setText("Customers:");
         CTCustomersLabel.setFocusable(false);
         
-        /*
-        CTCustomersList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        */
+        CTCustomersList.setModel(customersModel);
+        CTCustomersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         CTCustomersScrollPane.setViewportView(CTCustomersList);
 
         CTNameLabel.setText("Name:");
@@ -964,13 +961,10 @@ public class GUI extends JFrame {
         CTProjectsLabel.setText("Projects:");
         CTProjectsLabel.setFocusable(false);
 
-        /*
-        CTProjectsList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        */
+        CTProjectsList.setModel(custProModel);
+        CTProjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        
         CTProjectsScrollPane.setViewportView(CTProjectsList);
 
         //===============================
@@ -1049,13 +1043,10 @@ public class GUI extends JFrame {
         //===============================
         
         ITFinishLabel.setText("Projects to Finish:");
-        /*
-        ITFinishList.setModel(new AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        */
+        
+        ITFinishList.setModel(proToFinishModel);
+        ITFinishList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         ITFinishScrollPane.setViewportView(ITFinishList);
 
         ITFinishBtn.setText("Finish");
@@ -1160,9 +1151,6 @@ public class GUI extends JFrame {
         );
 
         pack();
-        
-
-		materialsModel.addElement(new Material("test material", 1, 35, 1, "notes here"));
 		
     }
     
@@ -1343,7 +1331,14 @@ public class GUI extends JFrame {
     static JTextField RTTotalCostField;
     static JTextField RTTotalTimeField;
 
-	static DefaultListModel<Material> materialsModel  = new DefaultListModel<Material>();
-	static DefaultListModel<Project>  projectsModel = new DefaultListModel<Project>();
+	static DefaultListModel<Material> allMaterialsModel  = new DefaultListModel<Material>();
+	static DefaultListModel<Material> usedMaterialsModel = new DefaultListModel<Material>();
+	static DefaultListModel<Material> dedicateMatModel   = new DefaultListModel<Material>();
+	static DefaultListModel<Project> usedInProModel   = new DefaultListModel<Project>();
+	static DefaultListModel<Project> openProModel 	  = new DefaultListModel<Project>();
+	static DefaultListModel<Project> closedProModel   = new DefaultListModel<Project>();
+	static DefaultListModel<Project> proToFinishModel = new DefaultListModel<Project>();
+	static DefaultListModel<Project> custProModel     = new DefaultListModel<Project>();
+	static DefaultListModel<Customer> customersModel = new DefaultListModel<Customer>();
           
 }
