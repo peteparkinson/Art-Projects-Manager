@@ -52,6 +52,7 @@ public class Action implements ActionListener, KeyListener{
             GUI.MTTypeComboBox.setEnabled(true);
             GUI.MTSubmitBtn.setEnabled(true);
             GUI.MTEditBtn.setEnabled(false);
+    		GUI.MTMaterialsList.setEnabled(false);
             
     	}
 
@@ -59,7 +60,7 @@ public class Action implements ActionListener, KeyListener{
     	 * Edit Material button
     	 ************************************************/
     	if(e.getSource() == GUI.MTEditBtn) {
-
+    		
             GUI.MTNotesArea.setEnabled(true);
             GUI.MTExtCostField.setEnabled(true);
             GUI.MTCostField.setEnabled(true);
@@ -70,6 +71,8 @@ public class Action implements ActionListener, KeyListener{
             GUI.MTTypeComboBox.setEnabled(true);
             GUI.MTSubmitBtn.setEnabled(true);
     		GUI.MTNewBtn.setEnabled(false);
+    		GUI.MTMaterialsList.setEnabled(false);
+    		
     		
     	}
 
@@ -89,11 +92,6 @@ public class Action implements ActionListener, KeyListener{
         			updateMatList(ListData.materials, GUI.allMaterialsModel);
         			resetMT();
     	        }
-    	        else {
-    	        	
-    	        }
-    	        
-
     		}
     	}
     	
@@ -108,9 +106,11 @@ public class Action implements ActionListener, KeyListener{
     		   GUI.MTTypeComboBox.getSelectedIndex() == 0) {
     			JOptionPane.showMessageDialog(null, "Please enter values in all fields.");
     		} else {
-    		submitNewMaterial();
+        		submitNewMaterial();
     		}
-    	}    	
+    		
+    	}
+    	
     	if(e.getSource() == GUI.NPTAddBtn) {
 
     	}    	
@@ -140,7 +140,7 @@ public class Action implements ActionListener, KeyListener{
     	}
     	
     }
-    
+
 	public void keyPressed(KeyEvent e) {
 
 	}
@@ -151,8 +151,11 @@ public class Action implements ActionListener, KeyListener{
     	 ************************************************/
 		if(e.getSource() == GUI.MTCostField || e.getSource() == GUI.MTQtyField ) {
 			if(GUI.MTCostField.getText().length() != 0 && GUI.MTQtyField.getText().length() != 0 ) {
-				GUI.MTExtCostField.setText(String.valueOf(Integer.parseInt(
-						GUI.MTQtyField.getText()) * Integer.parseInt(GUI.MTCostField.getText())));
+				
+				String qty = GUI.MTQtyField.getText();
+				String cost = GUI.MTCostField.getText();
+				
+				GUI.MTExtCostField.setText(String.valueOf((int) Double.parseDouble(cost) * Integer.parseInt(qty)));
 				GUI.MTAvailField.setText(GUI.MTQtyField.getText());
 			} else {
 				GUI.MTAvailField.setText(GUI.MTQtyField.getText());
@@ -165,7 +168,6 @@ public class Action implements ActionListener, KeyListener{
 
 	
 	}
-    
 
 	private void submitNewMaterial() {
 		String name = GUI.MTNameField.getText();
@@ -173,11 +175,29 @@ public class Action implements ActionListener, KeyListener{
 		double cost = Double.parseDouble(GUI.MTCostField.getText());
 		String notes = GUI.MTNotesArea.getText();
 		int type = GUI.MTTypeComboBox.getSelectedIndex();
-    		
+		
+		//check for duplicate entry if creating new material
+		if(FileControl.directoryContainsFile(FileControl.materialsPath, name) && GUI.MTNewBtn.isEnabled()) {
+			String message = "There is already a material with this name, would you like to make a duplicate?";
+			int reply = JOptionPane.showConfirmDialog(null, message , "Delete?", JOptionPane.YES_NO_OPTION);
+	        if (reply == JOptionPane.NO_OPTION) {
+	        	return;
+	        } else {
+	        	name += " " + ListData.materialSerialNumber;
+	        }
+
+		}
+		
+		//if editing existing material
+		if(!GUI.MTNewBtn.isEnabled()){
+			FileControl.deleteMatFile(GUI.MTMaterialsList.getSelectedValue());
+			ListData.materials.remove(GUI.MTMaterialsList.getSelectedValue());
+		}
+
 		Material m = new Material(ListData.materialSerialNumber, name, qoh, cost, type, notes);
 		
 		//add material to global list of all materials
-		ListData.materials.add(m);
+		ListData.materials.add(m);	
 		
 		//update on-screen lists
 		updateMatList(ListData.materials, GUI.allMaterialsModel);
@@ -190,6 +210,8 @@ public class Action implements ActionListener, KeyListener{
 		}
 		
 	    resetMT();
+		
+
 	}
 
 	public static void updateMatList(ArrayList<Material> list, DefaultListModel<Material> model) {
@@ -203,6 +225,7 @@ public class Action implements ActionListener, KeyListener{
 	public void resetMT() {
 
 	    //set all fields and buttons on materials tab to default state
+		GUI.MTMaterialsList.clearSelection();
         GUI.MTNotesArea.setEnabled(false);
         GUI.MTNotesArea.setText("");
         GUI.MTExtCostField.setEnabled(false);
@@ -220,7 +243,8 @@ public class Action implements ActionListener, KeyListener{
         GUI.MTTypeComboBox.setEnabled(false);
         GUI.MTTypeComboBox.setSelectedIndex(0);
         GUI.MTSubmitBtn.setEnabled(false);
-        GUI.MTEditBtn.setEnabled(true);
+        GUI.MTEditBtn.setEnabled(false);
         GUI.MTNewBtn.setEnabled(true);
+		GUI.MTMaterialsList.setEnabled(true);
 	}
 }

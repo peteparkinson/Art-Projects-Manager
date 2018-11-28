@@ -69,11 +69,32 @@ public class FileControl {
 		
 	}
 	
+	public static boolean directoryContainsFile(Path path, String fileName) {
+		File folder = new File(String.valueOf(materialsPath));
+		File[] listOfFiles = folder.listFiles();
+
+		System.out.println(listOfFiles.length);
+		
+		for(File file : listOfFiles) {
+			if(String.valueOf(file).contains(fileName + ".txt")) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	//loads material files into RAM, displays on GUI lists
 	public static void loadMaterialsLists(){
 		File folder = new File(String.valueOf(materialsPath));
 		File[] listOfFiles = folder.listFiles();
 
+		for(int i = 0; i < listOfFiles.length; i++) {
+
+			System.out.println("\nloaded " + listOfFiles[i]);
+		}
+			
+		
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
 		    	try {
@@ -82,6 +103,9 @@ public class FileControl {
 					Material m = new Material();
 
 					line = br.readLine();
+					if(Integer.parseInt(line) >= Integer.parseInt(ListData.materialSerialNumber)) {
+						ListData.materialSerialNumber = String.valueOf(Integer.parseInt(line) + 1);
+					}
 					m.setSerial(line);
 					
 					line = br.readLine();

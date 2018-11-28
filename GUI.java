@@ -180,6 +180,7 @@ public class GUI extends JFrame {
 
         MTEditBtn.setText("Edit");
         MTEditBtn.addActionListener(new Action());
+        MTEditBtn.setEnabled(false);
 
         MTSelectLabel.setText("Select:");
 
@@ -260,6 +261,7 @@ public class GUI extends JFrame {
 		            public void valueChanged(ListSelectionEvent event){
 		        		if (GUI.MTMaterialsList.getSelectedIndex() != -1){
 		        			
+		        			MTEditBtn.setEnabled(true);
 		        			Material e = GUI.MTMaterialsList.getSelectedValue();
 		            		MTNameField.setText(e.getName());
 		            		MTQtyField.setText(String.valueOf(e.getQOH()));
