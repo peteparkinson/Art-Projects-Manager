@@ -15,7 +15,7 @@ public class ListData {
 	public static ArrayList<Project> projectsToFinish = new ArrayList<Project>();
 	public static ArrayList<Customer> customers = new ArrayList<Customer>();
 	
-	public static String materialSerialNumber = "0";
+	private static String materialSerialNumber = "0";
 	
 	//types of materials
 	public static String[] materialTypes = new String[] 
@@ -48,11 +48,14 @@ public class ListData {
 		
 	}
 
-	/*
-	public ArrayList<String> getMaterialsNames(){
-		
+	public static String getNewSerial() {
+		String tmp = materialSerialNumber;
+		materialSerialNumber = String.valueOf(Integer.parseInt(materialSerialNumber) + 1);
+		return tmp;
 	}
-	*/
 	
-
+	public static void setSerial(String num) {
+		materialSerialNumber = num;;
+	}
+	
 }

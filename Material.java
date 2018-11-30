@@ -72,8 +72,6 @@ public class Material {
 	
 	//getters
 	public String getSerial() {
-		//increment serial numbers
-		ListData.materialSerialNumber = String.valueOf(Integer.parseInt(ListData.materialSerialNumber) + 1);
 		return serial;
 	}
 	public String getName() { 
@@ -99,6 +97,9 @@ public class Material {
 	}
 	public int getTypeIndex() {
 		return typeIndex;
+	}
+	public ArrayList<Project> getRelatedProjects() {
+		return projects;
 	}
 	
 	//setters
@@ -129,12 +130,14 @@ public class Material {
 	public void setTypeIndex(int typeIndex) {
 		this.typeIndex = typeIndex; 
 	}
-	
-	//add material to list of related projects
 	public void addToProject(Project project){ 
+		//add material to list of related projects
 		this.projects.add(project); 
 	}
-
+	public void removeFromProject(Project project){ 
+		//removes project from list of related projects
+		this.projects.remove(project); 
+	}
 	public String toString() { 
 		return name; 
 	}

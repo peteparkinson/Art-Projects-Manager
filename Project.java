@@ -24,7 +24,9 @@ import java.util.ArrayList;
 
 public class Project {
 
-	private String customer;
+	public static final double hourlyRate = 20.0;
+	
+	private Customer customer;
 	private String name;
 	private boolean openStatus;
 	private ArrayList<Material> materials;
@@ -32,16 +34,17 @@ public class Project {
 	private double suggestedCharge;
 	private double profit;
 	private int hours;
+	private int typeIndex;
 	
-	public Project(String name, String customer){
+	public Project(String name, Customer customer, ArrayList<Material> materials, int typeIndex){
 		this.name = name;
 		this.customer = customer;
+		this.materials = materials;
 		this.openStatus = true;
-		this.materials = new ArrayList<Material>();
-		this.costOfMaterials = 0.0;
-		this.suggestedCharge = 0.0;
-		this.profit = 0.0;
+		this.costOfMaterials = calculateCost(materials);
 		this.hours = 0;
+		this.suggestedCharge = costOfMaterials + (hours * hourlyRate);
+		this.profit = suggestedCharge - costOfMaterials;
 	}
 
 	//getters
@@ -57,7 +60,7 @@ public class Project {
 	public double getSuggestedCharge() {
 		return suggestedCharge;
 	}
-	public String getCustomer() {
+	public Customer getCustomer() {
 		return customer;
 	}
 	public String getName() {
@@ -69,12 +72,24 @@ public class Project {
 	public double getProfit() {
 		return profit;
 	}
+	public double getTypeIndex() {
+		return typeIndex;
+	}
 
 	//setters
 	public void setOpenStatus(boolean openStatus) {
 		this.openStatus = openStatus;
 	}
+	public void addMaterial(Material material) {
+		//adds a single material
+		this.materials.add(material);
+	}
+	public void removeMaterial(Material material) {
+		//removes a single material
+		this.materials.remove(material);
+	}
 	public void setMaterials(ArrayList<Material> materials) {
+		//overwrites entire list of materials
 		this.materials = materials;
 	}
 	public void setCostOfMaterials(double costOfMaterials) {
@@ -83,7 +98,7 @@ public class Project {
 	public void setSuggestedCharge(double suggestedCharge) {
 		this.suggestedCharge = suggestedCharge;
 	}
-	public void setCustomer(String customer) {
+	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
 	public void setName(String name) {
@@ -95,6 +110,18 @@ public class Project {
 	public void setProfit(double profit) {
 		this.profit = profit;
 	}
+	public void setTypeIndex(int typeIndex) {
+		this.typeIndex = typeIndex; 
+	}
 	
+	
+	
+	private static double calculateCost(ArrayList<Material> materials) {
+		double cost = 0.0;
+		for(Material m : materials) {
+			cost += m.getCost();
+		}
+		return cost;
+	}
 	
 }

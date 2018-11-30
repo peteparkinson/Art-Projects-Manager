@@ -260,17 +260,20 @@ public class GUI extends JFrame {
 		        {
 		            public void valueChanged(ListSelectionEvent event){
 		        		if (GUI.MTMaterialsList.getSelectedIndex() != -1){
+
+		        			Material m = GUI.MTMaterialsList.getSelectedValue();
 		        			
 		        			MTEditBtn.setEnabled(true);
-		        			Material e = GUI.MTMaterialsList.getSelectedValue();
-		            		MTNameField.setText(e.getName());
-		            		MTQtyField.setText(String.valueOf(e.getQOH()));
-		            		MTCostField.setText(String.valueOf(e.getCost()));
-		            		MTExtCostField.setText(String.valueOf(e.getQOH() * e.getCost()));
-		            		MTAvailField.setText(String.valueOf(e.getQOH()));
-		            		MTTypeComboBox.setSelectedItem(ListData.materialTypes[e.getTypeIndex()]);
+		            		MTNameField.setText(m.getName());
+		            		MTQtyField.setText(String.valueOf(m.getQOH()));
+		            		MTCostField.setText(String.valueOf(m.getCost()));
+		            		MTExtCostField.setText(String.valueOf(m.getQOH() * m.getCost()));
+		            		MTAvailField.setText(String.valueOf(m.getQOH()));
+		            		MTTypeComboBox.setSelectedItem(ListData.materialTypes[m.getTypeIndex()]);
 		            		MTUsingField.setText("0");
-		            		MTNotesArea.setText(e.getNotes());
+		            		MTNotesArea.setText(m.getNotes());
+		            		
+		            		Action.updateProList(usedInProModel, m.getRelatedProjects());
 		        		}
 		            }
 		        });
@@ -622,6 +625,23 @@ public class GUI extends JFrame {
 
         NPTMaterialsList.setModel(allMaterialsModel);
         NPTMaterialsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        NPTMaterialsList.addListSelectionListener(
+		        new ListSelectionListener()
+		        {
+		            public void valueChanged(ListSelectionEvent event){
+		        		if (GUI.NPTMaterialsList.getSelectedIndex() != -1){
+
+		        			Material m = GUI.MTMaterialsList.getSelectedValue();
+		        			
+		        			NPTAddBtn.setEnabled(true);
+		            		
+		        			//=====================================
+		        			//TODO
+		        			//=====================================
+		        			
+		        		}
+		            }
+		        });
         
         NPTMatScrollPane.setViewportView(NPTMaterialsList);
 

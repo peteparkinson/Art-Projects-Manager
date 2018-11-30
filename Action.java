@@ -89,7 +89,7 @@ public class Action implements ActionListener, KeyListener{
     	        if (reply == JOptionPane.YES_OPTION) {
         			FileControl.deleteMatFile(GUI.MTMaterialsList.getSelectedValue());
         			ListData.materials.remove(GUI.MTMaterialsList.getSelectedValue());
-        			updateMatList(ListData.materials, GUI.allMaterialsModel);
+        			updateMatList(GUI.allMaterialsModel, ListData.materials);
         			resetMT();
     	        }
     		}
@@ -112,7 +112,20 @@ public class Action implements ActionListener, KeyListener{
     	}
     	
     	if(e.getSource() == GUI.NPTAddBtn) {
-
+        	/************************************************
+        	 * Submit new Project button
+        	 ************************************************/
+        	if(e.getSource() == GUI.MTSubmitBtn) {
+        		if(GUI.NPTNameField.getText().length() == 0 ||
+        		   GUI.NPTNotesArea.getText().length() == 0 ||
+                   GUI.NPTCustomerComboBox.getSelectedIndex() == 0 ||
+        		   GUI.NPTTypeComboBox.getSelectedIndex() == 0) {
+        			JOptionPane.showMessageDialog(null, "Please enter values in all fields.");
+        		} else {
+            		submitNewProject();
+        		}
+        	}
+    		
     	}    	
     	if(e.getSource() == GUI.NPTRemoveBtn) {
 
@@ -171,10 +184,11 @@ public class Action implements ActionListener, KeyListener{
 
 	private void submitNewMaterial() {
 		String name = GUI.MTNameField.getText();
-		int qoh = Integer.parseInt(GUI.MTQtyField.getText());
-		double cost = Double.parseDouble(GUI.MTCostField.getText());
 		String notes = GUI.MTNotesArea.getText();
+		String serial = ListData.getNewSerial();
+		int qoh = Integer.parseInt(GUI.MTQtyField.getText());
 		int type = GUI.MTTypeComboBox.getSelectedIndex();
+		double cost = Double.parseDouble(GUI.MTCostField.getText());
 		
 		//check for duplicate entry if creating new material
 		if(FileControl.directoryContainsFile(FileControl.materialsPath, name) && GUI.MTNewBtn.isEnabled()) {
@@ -183,7 +197,7 @@ public class Action implements ActionListener, KeyListener{
 	        if (reply == JOptionPane.NO_OPTION) {
 	        	return;
 	        } else {
-	        	name += " " + ListData.materialSerialNumber;
+	        	name += " " + serial;
 	        }
 
 		}
@@ -194,13 +208,13 @@ public class Action implements ActionListener, KeyListener{
 			ListData.materials.remove(GUI.MTMaterialsList.getSelectedValue());
 		}
 
-		Material m = new Material(ListData.materialSerialNumber, name, qoh, cost, type, notes);
+		Material m = new Material(serial, name, qoh, cost, type, notes);
 		
 		//add material to global list of all materials
 		ListData.materials.add(m);	
 		
 		//update on-screen lists
-		updateMatList(ListData.materials, GUI.allMaterialsModel);
+		updateMatList(GUI.allMaterialsModel, ListData.materials);
 		
 		//write material to file
 	    try {
@@ -210,16 +224,60 @@ public class Action implements ActionListener, KeyListener{
 		}
 		
 	    resetMT();
+	}
+	
+	private void submitNewProject() {
+		String name = GUI.NPTNameField.getText();
+		String notes = GUI.NPTNotesArea.getText();
+		Customer customer = ListData.customers.get(GUI.NPTCustomerComboBox.getSelectedIndex());
+		int typeIndex = GUI.NPTTypeComboBox.getSelectedIndex();
+		ArrayList<Material> materials = new ArrayList<Material>();
+		
+		//populate materials list
+		for(int i = 0; i < GUI.NPTDedicateList.getModel().getSize(); i++) {
+			 materials.add(GUI.NPTDedicateList.getModel().getElementAt(i));
+		}
+		
+		//check for duplicate entry if creating new project
+		if(FileControl.directoryContainsFile(FileControl.projectsPath, name)) {
+			//TODO
+
+		}
 		
 
+		Project p = new Project(name, customer, materials, typeIndex);
+		
+		//add material to global list of all materials
+		ListData.openProjects.add(p);	
+		
+		//write material to file
+	    try {
+			FileControl.createProjectFile(p);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		
+	    resetNPT();
 	}
 
-	public static void updateMatList(ArrayList<Material> list, DefaultListModel<Material> model) {
+	public static void updateMatList(DefaultListModel<Material> model, ArrayList<Material> list) {
 		model.removeAllElements();
     	for(int i = 0; i < list.size(); i++) {
     		model.addElement(list.get(i));
     	}
-		
+	}
+
+	public static void updateProList(DefaultListModel<Project> model, ArrayList<Project> list) {
+		model.removeAllElements();
+    	for(int i = 0; i < list.size(); i++) {
+    		model.addElement(list.get(i));
+    	}
+	}
+	
+	public static void updateDedicateList(DefaultListModel<Material> model, ArrayList<Material> list) {
+		//====================================
+		// TODO
+		//====================================
 	}
 	
 	public void resetMT() {
@@ -247,4 +305,32 @@ public class Action implements ActionListener, KeyListener{
         GUI.MTNewBtn.setEnabled(true);
 		GUI.MTMaterialsList.setEnabled(true);
 	}
+	
+	public void resetNPT() {
+
+	    //set all fields and buttons on materials tab to default state
+		GUI.NPTDedicateList.clearSelection();
+        GUI.MTNotesArea.setEnabled(false);
+        GUI.MTNotesArea.setText("");
+        GUI.MTExtCostField.setEnabled(false);
+        GUI.MTExtCostField.setText("");
+        GUI.MTCostField.setEnabled(false);
+        GUI.MTCostField.setText("");
+        GUI.MTNameField.setEnabled(false);
+        GUI.MTNameField.setText("");
+        GUI.MTQtyField.setEnabled(false);
+        GUI.MTQtyField.setText("");
+        GUI.MTUsingField.setEnabled(false);
+        GUI.MTUsingField.setText("");
+        GUI.MTAvailField.setEnabled(false);
+        GUI.MTAvailField.setText("");
+        GUI.MTTypeComboBox.setEnabled(false);
+        GUI.MTTypeComboBox.setSelectedIndex(0);
+        GUI.MTSubmitBtn.setEnabled(false);
+        GUI.MTEditBtn.setEnabled(false);
+        GUI.MTNewBtn.setEnabled(true);
+		GUI.MTMaterialsList.setEnabled(true);
+	}
+
+
 }

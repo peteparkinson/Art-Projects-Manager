@@ -30,7 +30,7 @@ public class Main {
     public static void main(String args[]) {
 
     	//if unable to verify and write file system, close program
-        if(!FileControl.initDirectories()) {
+        if(!FileControl.init()) {
         	return;
         }
         

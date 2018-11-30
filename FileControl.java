@@ -103,9 +103,10 @@ public class FileControl {
 					Material m = new Material();
 
 					line = br.readLine();
-					if(Integer.parseInt(line) >= Integer.parseInt(ListData.materialSerialNumber)) {
-						ListData.materialSerialNumber = String.valueOf(Integer.parseInt(line) + 1);
+					if(Integer.parseInt(line) >= Integer.parseInt(ListData.getNewSerial())) {
+						ListData.setSerial(String.valueOf(Integer.parseInt(line) + 1));
 					}
+					
 					m.setSerial(line);
 					
 					line = br.readLine();
@@ -137,7 +138,7 @@ public class FileControl {
 				}
 				//display global materials list on GUI lists
 
-				Action.updateMatList(ListData.materials, GUI.allMaterialsModel);
+				Action.updateMatList(GUI.allMaterialsModel, ListData.materials);
 		        System.out.println();
 		    }
 		}
@@ -159,9 +160,9 @@ public class FileControl {
 
 					//finds the material's serial number in the file
 					if(m.getSerial().equals(line)) {
-						System.out.println("deleted " + String.valueOf(file));
 						br.close();
 						file.delete();
+						System.out.println("deleted " + String.valueOf(file));
 						return;
 						
 					}
@@ -183,20 +184,18 @@ public class FileControl {
 		
 	}
 	
-	public static void loadProjects(){
+	public static void loadProjects() {
 		
 	}
 	
-	public static void createProjectFile(Project p) throws IOException{
+	public static void createProjectFile(Project p) throws IOException {
 
 		BufferedWriter bw = null;
 		FileWriter writer = null;
-		File f = new File(
-				projectsPath + "\\" +  p.getName() + ".txt");
+		File f = new File(projectsPath + "\\" +  p.getName() + ".txt");
 		  
 		//Create the file
-		if (f.createNewFile())
-		{
+		if (f.createNewFile()) {
 		    System.out.println("File is created!");
 		} else {
 		    System.out.println("File already exists.");
@@ -212,82 +211,33 @@ public class FileControl {
 		
 	}
 
-	public static boolean initDirectories() {
+	public static boolean init() {
+		if(!initDirectory(APMPath) ||
+		   !initDirectory(materialsPath) ||
+		   !initDirectory(projectsPath)  ||
+		   !initDirectory(customersPath) ||
+		   !initDirectory(invoicesPath)) {
 
-		//validate main directory exists
-		if (Files.exists(APMPath)) {
-		    System.out.println("Art Projects Manager directory exists");
-		} else {
-			System.out.println("Art Projects Manager directory does not exist");
-			boolean created = (new File(String.valueOf(APMPath))).mkdirs();
-			if (created) {
-				System.out.println("Created Art Projects Manager directory");
-			} else {
-			    System.out.println("Could not create main file directory");
-			    System.out.println("Exiting program");
-			    return false;
-			}
-		}
+			return false;
+		} 
+		return true;
 		
-		//validate materials directory
-		if (Files.exists(materialsPath)) {
-		    System.out.println("Materials directory exists");
+	}
+	
+	public static boolean initDirectory(Path path) {
+		if (Files.exists(path)) {
+		    System.out.println(path + " directory exists");
 		} else {
-			System.out.println("Materials directory does not exist");
-			boolean created = (new File(String.valueOf(materialsPath))).mkdirs();
+			System.out.println(path + " does not exist");
+			boolean created = (new File(String.valueOf(path))).mkdirs();
 			if (created) {
-				System.out.println("Created Materials directory");
+				System.out.println("Created " + path + " directory");
 			} else {
-			    System.out.println("Could not create Materials file directory");
+			    System.out.println("Could not create " + path);
 			    System.out.println("Exiting program");
 			    return false;
 			}
-		}
-		
-		//validate projects directory
-		if (Files.exists(projectsPath)) {
-		    System.out.println("Projects directory exists");
-		} else {
-			System.out.println("Projects directory does not exist");
-			boolean created = (new File(String.valueOf(projectsPath))).mkdirs();
-			if (created) {
-				System.out.println("Created Projects directory");
-			} else {
-			    System.out.println("Could not create Projects file directory");
-			    System.out.println("Exiting program");
-			    return false;
-			}
-		}
-		
-		//validate customer directory
-		if (Files.exists(customersPath)) {
-		    System.out.println("Customers directory exists");
-		} else {
-			System.out.println("Customers directory does not exist");
-			boolean created = (new File(String.valueOf(customersPath))).mkdirs();
-			if (created) {
-				System.out.println("Created Customers directory");
-			} else {
-			    System.out.println("Could not create Customers file directory");
-			    System.out.println("Exiting program");
-			    return false;
-			}
-		}
-		
-		//validate invoices directory
-		if (Files.exists(invoicesPath)) {
-		    System.out.println("Invoices directory exists");
-		} else {
-			System.out.println("Invoices directory does not exist");
-			boolean created = (new File(String.valueOf(invoicesPath))).mkdirs();
-			if (created) {
-				System.out.println("Created Invoices directory");
-			} else {
-			    System.out.println("Could not create Invoices file directory");
-			    System.out.println("Exiting program");
-			    return false;
-			}
-		}
+		}		
 		return true;
 	}
 
