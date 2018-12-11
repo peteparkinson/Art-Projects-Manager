@@ -40,11 +40,18 @@ public class Material {
 		
 	}
 	
+	//List constructor
+	public Material(String name) {
+		this.name = name;		
+	}
+	
 	/*************************************************
 	 * constructor
+	 * @param serial
 	 * @param name
 	 * @param qtyOnHand
 	 * @param cost
+	 * @param typeIndex
 	 * @param notes
 	 *  qtyInUse
 	 *  qtyAvailable
@@ -63,11 +70,6 @@ public class Material {
 		this.extCost  = this.cost * this.qtyOnHand;
 		this.projects = new ArrayList<Project>();
 		
-	}
-	
-	//List constructor
-	public Material(String name) {
-		this.name = name;		
 	}
 	
 	//getters

@@ -34,8 +34,10 @@ public class Main {
         	return;
         }
         
-        //load materials
+        //load materials, customers, projects
         FileControl.loadMaterialsLists();
+        FileControl.loadCustomersLists();
+        FileControl.loadProjectsLists();
         
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {

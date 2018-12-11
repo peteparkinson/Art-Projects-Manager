@@ -25,9 +25,11 @@ import java.util.ArrayList;
 public class Project {
 
 	public static final double hourlyRate = 20.0;
-	
+
+	private String serial;
 	private Customer customer;
 	private String name;
+	private String notes;
 	private boolean openStatus;
 	private ArrayList<Material> materials;
 	private double costOfMaterials;
@@ -36,9 +38,31 @@ public class Project {
 	private int hours;
 	private int typeIndex;
 	
-	public Project(String name, Customer customer, ArrayList<Material> materials, int typeIndex){
+	//default constructor
+	public Project(){
+		
+	}
+	
+	//List constructor
+	public Project(String name) {
+		this.name = name;		
+	}
+	
+	/*************************************************
+	 * constructor
+	 * @param serial
+	 * @param name
+	 * @param typeIndex
+	 * @param customer
+	 * @param notes
+	 * @param relMaterials
+	 */
+	public Project(String serial, String name, int typeIndex, Customer customer, String notes, ArrayList<Material> materials){
+		this.serial = serial;
 		this.name = name;
+		this.typeIndex  = typeIndex;
 		this.customer = customer;
+		this.notes = notes;
 		this.materials = materials;
 		this.openStatus = true;
 		this.costOfMaterials = calculateCost(materials);
@@ -48,7 +72,7 @@ public class Project {
 	}
 
 	//getters
-	public boolean isOpenStatus() {
+	public boolean getOpenStatus() {
 		return openStatus;
 	}
 	public ArrayList<Material> getMaterials() {
@@ -63,8 +87,14 @@ public class Project {
 	public Customer getCustomer() {
 		return customer;
 	}
+	public String getSerial() {
+		return serial;
+	}
 	public String getName() {
 		return name;
+	}
+	public String getNotes() {
+		return notes;
 	}
 	public int getHours() {
 		return hours;
@@ -72,7 +102,7 @@ public class Project {
 	public double getProfit() {
 		return profit;
 	}
-	public double getTypeIndex() {
+	public int getTypeIndex() {
 		return typeIndex;
 	}
 
@@ -101,8 +131,14 @@ public class Project {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+	public void setSerial(String serial) {
+		this.serial = serial;
+	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	public void setHours(int hours) {
 		this.hours = hours;
@@ -113,8 +149,10 @@ public class Project {
 	public void setTypeIndex(int typeIndex) {
 		this.typeIndex = typeIndex; 
 	}
-	
-	
+	public String toString() { 
+		return name; 
+	}
+
 	
 	private static double calculateCost(ArrayList<Material> materials) {
 		double cost = 0.0;
