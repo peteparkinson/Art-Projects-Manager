@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileControl {
@@ -131,6 +132,7 @@ public class FileControl {
 		 *  - customer
 		 *  - notes
 		 *  - openStatus
+		 *  - materials
 		 */
 
 		bw.write(p.getSerial());
@@ -145,6 +147,11 @@ public class FileControl {
         bw.newLine();
 		bw.write(String.valueOf(p.getOpenStatus()));
         bw.newLine();
+		bw.write(String.valueOf(p.getHours()));
+		for(int i = 0; i < p.getMaterials().size(); i++) {
+			bw.newLine();
+			bw.write(p.getMaterials().get(i).getName());
+		}
 		bw.close();
 		
 	}
@@ -278,20 +285,22 @@ public class FileControl {
 					BufferedReader br = new BufferedReader(new FileReader(file));
 					String line = null;
 
+					 /*********************
+					  *  - serial
+					  *  - name
+					  *  - type
+					  *  - customer
+					  *  - notes
+					  *  - openStatus
+					  *  - hours
+					  *  - materials
+					 *********************/
+					 
 					line = br.readLine();
 					//set global serial to 1 higher than highest read
 					if(Integer.parseInt(line) >= ListData.getProSerial()) {
 						ListData.setProSerial(String.valueOf(Integer.parseInt(line) + 1));
 					}
-
-					 /* - serial
-					 *  - name
-					 *  - type
-					 *  - customer
-					 *  - notes
-					 *  - openStatus
-					 */
-					 
 					p.setSerial(line);
 					line = br.readLine();
 					p.setName(line);
@@ -302,6 +311,7 @@ public class FileControl {
 					for(int i = 0; i < ListData.customers.size(); i++) {
 						if(ListData.customers.get(i).getName().equals(line)) {
 							c = ListData.customers.get(i);
+							break;
 						}
 					}
 					p.setCustomer(c);
@@ -313,6 +323,18 @@ public class FileControl {
 						status = false;
 					}
 					p.setOpenStatus(status);
+					line = br.readLine();
+					p.setHours(Integer.parseInt(line));
+					Material m;
+					while ((line = br.readLine()) != null) {
+						for(int i = 0; i < ListData.materials.size(); i++) {
+							m = ListData.materials.get(i);
+							if(String.valueOf(ListData.materials.get(i)).equals(line)) {
+								m.useOne();
+								p.addMaterial(m);
+							}
+						}
+					}
 					br.close();
 					
 					//add project to global arraylist
@@ -338,8 +360,10 @@ public class FileControl {
 		    }
 		}
 	}
-	
-	//delete objects respective file
+
+
+
+	//delete customer's respective file
 	public static void deleteCustFile(Customer c) {
 		File folder = new File(String.valueOf(customersPath));
 		File[] listOfFiles = folder.listFiles();
@@ -378,7 +402,7 @@ public class FileControl {
 		
 	}
 
-	//delete objects respective file
+	//delete material's respective file
 	public static void deleteMatFile(Material m) {
 		File folder = new File(String.valueOf(materialsPath));
 		File[] listOfFiles = folder.listFiles();
@@ -414,6 +438,50 @@ public class FileControl {
 		    }
 		}
 		
+		
+	}
+
+	//delete project's respective file
+	public static void deleteProFile(Project p) {
+		File folder = new File(String.valueOf(projectsPath));
+		File[] listOfFiles = folder.listFiles();
+		folder = new File(String.valueOf(projectsPath));
+	
+
+		for (File file : listOfFiles) {
+		    if (file.isFile()) {
+		    	try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String line = br.readLine();
+
+					//finds the material's serial number in the file
+					if(p.getSerial().equals(line)) {
+						br.close();
+						file.delete();
+						System.out.println("deleted " + String.valueOf(file));
+						return;
+						
+					}
+					
+					br.close();
+					
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					System.out.println("Cannot find file " + file);
+				} catch (IOException e) {
+					System.out.println("Cannot read from file " + file);
+					e.printStackTrace();
+				}
+
+		    }
+		}
+		
+	}
+	
+	public static void closeProFile(Project p) {
+
+		//TODO
 		
 	}
 	

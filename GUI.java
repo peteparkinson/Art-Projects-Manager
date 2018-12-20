@@ -1,10 +1,5 @@
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame {
 
@@ -89,11 +84,12 @@ public class GUI extends JFrame {
         MTAvailField   = new JTextField();
 
         //New Project tab
-        NPTAddBtn      = new JButton();
-        NPTRemoveBtn   = new JButton();
+        NPTAddBtn     = new JButton();
+        NPTRemoveBtn  = new JButton();
         NPTCancelBtn  = new JButton();
-        NPTSubmitBtn   = new JButton();
-        NPTEditBtn   = new JButton();
+        NPTSubmitBtn  = new JButton();
+        NPTEditBtn    = new JButton();
+        PTEditBtn 	  = new JButton();
         NPTCustomerComboBox = new JComboBox<>();
         NPTTypeComboBox 	= new JComboBox<>();
         NPTNameLabel 	  = new JLabel();
@@ -104,6 +100,7 @@ public class GUI extends JFrame {
         NPTTypeLabel 	  = new JLabel();
         ElunaMaeArtsLabel = new JLabel();
         NPTProjectsLabel  = new JLabel();
+        NPTqtyLabel 	  = new JLabel();
         NPTMaterialsList = new JList<>();
         NPTDedicateList  = new JList<>();
         NPTProjectsList  = new JList<>();
@@ -177,6 +174,8 @@ public class GUI extends JFrame {
 
         jtp.setFocusable(false);
         jtp.setPreferredSize(new Dimension(820, 520));
+        jtp.addChangeListener(new Action());
+
 
         //newProjectPanel.setPreferredSize(new Dimension(820, 430));
 
@@ -384,9 +383,14 @@ public class GUI extends JFrame {
         PTDeleteBtn.setEnabled(false);
         PTDeleteBtn.addActionListener(new Action());
         PTAutoChargeBtn.setText("Auto");
+        PTAutoChargeBtn.setEnabled(false);
         PTAutoChargeBtn.addActionListener(new Action());
         PTManChargeBtn.setText("Manual");
+        PTManChargeBtn.setEnabled(false);
         PTManChargeBtn.addActionListener(new Action());
+        PTEditBtn.setText("Edit");
+        PTEditBtn.setEnabled(false);
+        PTEditBtn.addActionListener(new Action());
 
         //labels
         PTCostLabel.setFont(new Font("Tahoma", 1, 14)); // NOI18N
@@ -415,16 +419,19 @@ public class GUI extends JFrame {
         PTNetLabel.setFocusable(false);
 
         //fields
-        PTChargeField.setEditable(false);
+        PTChargeField.setEnabled(false);
         PTChargeField.setHorizontalAlignment(JTextField.RIGHT);
-        PTNetField.setEditable(false);
+        PTNetField.setEnabled(false);
         PTNetField.setHorizontalAlignment(JTextField.RIGHT);
-        PTCustomerField.setEditable(false);
+        PTCustomerField.setEnabled(false);
         PTCustomerField.setHorizontalAlignment(JTextField.RIGHT);
-        PTTotalField.setEditable(false);
+        PTTotalField.setEnabled(false);
         PTTotalField.setHorizontalAlignment(JTextField.RIGHT);
-        PTMatCostField.setEditable(false);
+        PTMatCostField.setEnabled(false);
         PTMatCostField.setHorizontalAlignment(JTextField.RIGHT);
+        
+        //other
+        PTHoursSpinner.setEnabled(false);
         
         //lists
         PTOpenScrollPane.setViewportView(PTOpenProList);
@@ -442,6 +449,7 @@ public class GUI extends JFrame {
         /**************************************************
          * Draw Projects tab
          **************************************************/
+
         GroupLayout projectsPanelLayout = new GroupLayout(projectsPanel);
         projectsPanel.setLayout(projectsPanelLayout);
         projectsPanelLayout.setHorizontalGroup(
@@ -450,7 +458,7 @@ public class GUI extends JFrame {
                 .addContainerGap()
                 .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(PTOpenProLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PTCloseBtn, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                    .addComponent(PTCloseBtn, GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                     .addComponent(PTOpenScrollPane))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -463,41 +471,49 @@ public class GUI extends JFrame {
                     .addComponent(PTClosedScrollPane, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                        .addComponent(PTSeparator1, GroupLayout.Alignment.TRAILING)
-                        .addComponent(PTCustomerLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PTCostLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(projectsPanelLayout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addGroup(projectsPanelLayout.createSequentialGroup()
-                                    .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                        .addComponent(PTTotalLabel, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(PTMatCostLabel)
-                                        .addComponent(PTHoursLabel, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(PTHoursSpinner, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(PTMatCostField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(PTTotalField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(projectsPanelLayout.createSequentialGroup()
-                                    .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(PTNetLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(PTChargeLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                                    .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(PTChargeField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(PTNetField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(PTCustomerField))))
+                    .addComponent(PTSeparator2)
+                    .addGroup(projectsPanelLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(PTMatCostLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(PTHoursLabel, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
                     .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addGroup(projectsPanelLayout.createSequentialGroup()
+                        .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(PTSeparator1, GroupLayout.Alignment.TRAILING)
+                                .addComponent(PTCustomerLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PTCostLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(projectsPanelLayout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createSequentialGroup()
+                                            .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                .addGroup(projectsPanelLayout.createSequentialGroup()
+                                                    .addComponent(PTTotalLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addGap(69, 69, 69))
+                                                .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createSequentialGroup()
+                                                    .addGap(0, 0, Short.MAX_VALUE)
+                                                    .addComponent(PTEditBtn)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+                                            .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                .addComponent(PTHoursSpinner, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(PTMatCostField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(PTTotalField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(projectsPanelLayout.createSequentialGroup()
+                                            .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                .addComponent(PTNetLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(PTChargeLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                                            .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                .addComponent(PTChargeField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(PTNetField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(PTCustomerField))))
+                            .addGroup(GroupLayout.Alignment.TRAILING, projectsPanelLayout.createSequentialGroup()
                                 .addComponent(PTAutoChargeBtn)
                                 .addGap(37, 37, 37)
                                 .addComponent(PTManChargeBtn, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-                            .addComponent(PTProfitLabel, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(PTSeparator2))
+                            .addComponent(PTProfitLabel, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28))
         );
         projectsPanelLayout.setVerticalGroup(
@@ -515,7 +531,8 @@ public class GUI extends JFrame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(PTHoursLabel)
-                            .addComponent(PTHoursSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(PTHoursSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PTEditBtn))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(projectsPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(PTMatCostLabel)
@@ -543,7 +560,7 @@ public class GUI extends JFrame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(PTSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(PTCustomerLabel, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                        .addComponent(PTCustomerLabel, GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(PTCustomerField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addComponent(PTClosedScrollPane)
@@ -595,6 +612,7 @@ public class GUI extends JFrame {
         NPTTypeLabel.setText("Type:");
         NPTTypeLabel.setFocusable(false);
         NPTProjectsLabel.setText("Open Projects:");
+        NPTqtyLabel.setText("");
 
         //other
         NPTNotesArea.setColumns(20);
@@ -607,7 +625,6 @@ public class GUI extends JFrame {
         NPTTypeComboBox.setEditable(true);
         NPTTypeComboBox.setModel(new DefaultComboBoxModel<>(ListData.projectTypes));
         NPTTypeComboBox.addActionListener(new Action());
-        
 
         NPTDeleteMenuItem.setText("Delete");
         NPTDeleteMenuItem.addActionListener(new Action());
@@ -624,6 +641,7 @@ public class GUI extends JFrame {
         NPTDedicateList.setModel(dedicateMatModel);
         NPTDedicateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         NPTDedicateList.addListSelectionListener(new Action());
+        NPTDedicateList.setEnabled(false);
         NPTProjectsList.setModel(openProModel);
         NPTProjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         NPTProjectsList.addMouseListener(new Action());
@@ -633,106 +651,110 @@ public class GUI extends JFrame {
          * Draw New Projects tab
          **************************************************/
         
-        GroupLayout newProjectPanelLayout = new GroupLayout(newProjectPanel);
+        javax.swing.GroupLayout newProjectPanelLayout = new javax.swing.GroupLayout(newProjectPanel);
         newProjectPanel.setLayout(newProjectPanelLayout);
         newProjectPanelLayout.setHorizontalGroup(
-            newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newProjectPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(NPTProjectsLabel)
-                    .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                        .addComponent(NPTCustomerLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(NPTTypeLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(NPTNameLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                    .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(NPTCustomerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(NPTTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NPTNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NPTNotesLabel))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(NPTTypeComboBox, GroupLayout.Alignment.LEADING, 0, 257, Short.MAX_VALUE)
-                            .addComponent(NPTNameField, GroupLayout.Alignment.LEADING)
-                            .addComponent(NPTCustomerComboBox, GroupLayout.Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(NPTTypeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 257, Short.MAX_VALUE)
+                            .addComponent(NPTNameField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(NPTCustomerComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(newProjectPanelLayout.createSequentialGroup()
-                                .addComponent(NPTCancelBtn, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                                .addComponent(NPTCancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                                 .addComponent(NPTEditBtn))
-                            .addComponent(NPTNotesScrollPane, GroupLayout.Alignment.LEADING)
+                            .addComponent(NPTNotesScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NPTProjectsScrollPane))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(NPTMatScrollPane, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NPTAddBtn, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(newProjectPanelLayout.createSequentialGroup()
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(NPTMatScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
+                                .addComponent(NPTqtyLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(NPTAddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(NPTChooseMatLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(newProjectPanelLayout.createSequentialGroup()
                                 .addComponent(NPTRemoveBtn)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(NPTSubmitBtn, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-                            .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(NPTSubmitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(NPTDedicateLabel)
-                                .addComponent(NPTDedicateScrollPane, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(NPTDedicateScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(21, 21, 21))
-                    .addGroup(GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(ElunaMaeArtsLabel, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NPTSeparator1, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE))
-                        .addGap(104, 104, 104))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ElunaMaeArtsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NPTSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(99, 99, 99))))
         );
         newProjectPanelLayout.setVerticalGroup(
-            newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(newProjectPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(NPTNameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(NPTNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NPTNameLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(NPTTypeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(NPTTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NPTTypeLabel))
                         .addGap(9, 9, 9)
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(NPTCustomerComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(NPTCustomerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NPTCustomerLabel)))
-                    .addGroup(GroupLayout.Alignment.TRAILING, newProjectPanelLayout.createSequentialGroup()
+                    .addGroup(newProjectPanelLayout.createSequentialGroup()
                         .addComponent(ElunaMaeArtsLabel)
                         .addGap(0, 0, 0)
-                        .addComponent(NPTSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(NPTSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(NPTDedicateLabel, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(NPTDedicateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NPTChooseMatLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NPTMatScrollPane)
                             .addComponent(NPTDedicateScrollPane)))
                     .addGroup(newProjectPanelLayout.createSequentialGroup()
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NPTNotesLabel)
-                            .addComponent(NPTNotesScrollPane, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(NPTProjectsScrollPane, GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(NPTNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(NPTProjectsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                             .addGroup(newProjectPanelLayout.createSequentialGroup()
                                 .addComponent(NPTProjectsLabel)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(newProjectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(newProjectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NPTAddBtn)
-                    .addComponent(NPTRemoveBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NPTCancelBtn, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NPTRemoveBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NPTCancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NPTSubmitBtn)
-                    .addComponent(NPTEditBtn))
+                    .addComponent(NPTEditBtn)
+                    .addComponent(NPTqtyLabel))
                 .addGap(26, 26, 26))
         );
 
@@ -916,6 +938,7 @@ public class GUI extends JFrame {
         CTCustomersScrollPane.setViewportView(CTCustomersList);
         CTProjectsScrollPane.setViewportView(CTProjectsList);
 
+        CTProjectsList.setEnabled(false);
         CTProjectsList.setModel(custProModel);
         CTProjectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         CTCustomersList.setModel(customersModel);
@@ -1129,7 +1152,7 @@ public class GUI extends JFrame {
      **************************************************/
     
     //Tabbed pane
-    private JTabbedPane jtp;
+    static JTabbedPane jtp;
 
     //Tabs
     private JPanel customersPanel;
@@ -1208,7 +1231,7 @@ public class GUI extends JFrame {
     static JButton NPTRemoveBtn;
     static JButton NPTSubmitBtn;
     static JButton NPTEditBtn;
-    static JComboBox<Customer> NPTCustomerComboBox;
+    static JComboBox<String> NPTCustomerComboBox;
     static JComboBox<String> NPTTypeComboBox;
     private JLabel ElunaMaeArtsLabel;
     private JLabel NPTChooseMatLabel;
@@ -1218,6 +1241,7 @@ public class GUI extends JFrame {
     private JLabel NPTNotesLabel;
     private JLabel NPTProjectsLabel;
     private JLabel NPTTypeLabel;
+    static JLabel NPTqtyLabel;
     static JList<Material> NPTDedicateList;
     static JList<Material> NPTMaterialsList;
     static JList<Project> NPTProjectsList;
@@ -1236,6 +1260,7 @@ public class GUI extends JFrame {
     static JButton PTCloseBtn;
     static JButton PTManChargeBtn;
     static JButton PTReopenBtn;
+    static JButton PTEditBtn;
     private JButton PTDeleteBtn;
     private JLabel PTChargeLabel;
     private JLabel PTClosedProLabel;

@@ -14,7 +14,6 @@
   - extended cost
   - total quantity
   - quantity in use
-  - quantity available
   - associated projects
 */
 
@@ -30,7 +29,6 @@ public class Material {
 	private int typeIndex;
 	private int qtyOnHand;
 	private int qtyInUse;
-	private int qtyAvail;
 	private double cost;
 	private double extCost;
 	private ArrayList<Project> projects;
@@ -54,7 +52,6 @@ public class Material {
 	 * @param typeIndex
 	 * @param notes
 	 *  qtyInUse
-	 *  qtyAvailable
 	 *  extCost
 	 *  relProjects
 	 */
@@ -66,7 +63,6 @@ public class Material {
 		this.typeIndex  = typeIndex;
 		this.notes = notes;
 		this.qtyInUse = 0;
-		this.qtyAvail = this.qtyOnHand - this.qtyInUse;
 		this.extCost  = this.cost * this.qtyOnHand;
 		this.projects = new ArrayList<Project>();
 		
@@ -90,9 +86,6 @@ public class Material {
 	}
 	public int getQtyInUse() { 
 		return qtyInUse; 
-	}
-	public int getQtyAvail() { 
-		return qtyAvail; 
 	}
 	public double getExtCost() { 
 		return extCost; 
@@ -123,8 +116,11 @@ public class Material {
 	public void setQtyInUse(int qtyInUse) { 
 		this.qtyInUse = qtyInUse; 
 	}
-	public void setQtyAvail(int qtyAvail) {
-		this.qtyAvail = qtyAvail; 
+	public void ignoreUse() {
+		this.qtyInUse--;
+	}
+	public void useOne() {
+		this.qtyInUse++;
 	}
 	public void setExtCost(double extCost) { 
 		this.extCost = extCost; 

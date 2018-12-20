@@ -24,23 +24,20 @@ import java.util.ArrayList;
 
 public class Project {
 
-	public static final double hourlyRate = 20.0;
+	public static final double hourlyRate = 5.0;
+	public static final double markup = 2.0;
 
 	private String serial;
 	private Customer customer;
 	private String name;
 	private String notes;
 	private boolean openStatus;
-	private ArrayList<Material> materials;
-	private double costOfMaterials;
-	private double suggestedCharge;
-	private double profit;
+	private ArrayList<Material> materials = new ArrayList<Material>();
 	private int hours;
 	private int typeIndex;
 	
 	//default constructor
 	public Project(){
-		
 	}
 	
 	//List constructor
@@ -65,10 +62,7 @@ public class Project {
 		this.notes = notes;
 		this.materials = materials;
 		this.openStatus = true;
-		this.costOfMaterials = calculateCost(materials);
 		this.hours = 0;
-		this.suggestedCharge = costOfMaterials + (hours * hourlyRate);
-		this.profit = suggestedCharge - costOfMaterials;
 	}
 
 	//getters
@@ -77,12 +71,6 @@ public class Project {
 	}
 	public ArrayList<Material> getMaterials() {
 		return materials;
-	}
-	public double getCostOfMaterials() {
-		return costOfMaterials;
-	}
-	public double getSuggestedCharge() {
-		return suggestedCharge;
 	}
 	public Customer getCustomer() {
 		return customer;
@@ -99,34 +87,38 @@ public class Project {
 	public int getHours() {
 		return hours;
 	}
-	public double getProfit() {
-		return profit;
-	}
 	public int getTypeIndex() {
 		return typeIndex;
+	}
+	public String getCOM() {
+		return String.valueOf(Math.floor(calculateCost(materials)));
+	}
+	public String getTotal() {
+		return String.valueOf(Math.floor(calculateCost(materials) + (hours * hourlyRate)));
+	}
+	public String getCharge() {
+		return String.valueOf(Math.floor((calculateCost(materials) + (hours * hourlyRate)) * markup));
+	}
+	public String getNet() {
+		return String.valueOf(Math.floor((calculateCost(materials) + (hours * hourlyRate)) * markup) - 
+				Math.floor(calculateCost(materials) + (hours * hourlyRate)));
 	}
 
 	//setters
 	public void setOpenStatus(boolean openStatus) {
 		this.openStatus = openStatus;
 	}
-	public void addMaterial(Material material) {
+	public void addMaterial(Material m) {
 		//adds a single material
-		this.materials.add(material);
+		this.materials.add(m);
 	}
-	public void removeMaterial(Material material) {
+	public void removeMaterial(Material m) {
 		//removes a single material
-		this.materials.remove(material);
+		this.materials.remove(m);
 	}
 	public void setMaterials(ArrayList<Material> materials) {
 		//overwrites entire list of materials
 		this.materials = materials;
-	}
-	public void setCostOfMaterials(double costOfMaterials) {
-		this.costOfMaterials = costOfMaterials;
-	}
-	public void setSuggestedCharge(double suggestedCharge) {
-		this.suggestedCharge = suggestedCharge;
 	}
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
@@ -143,16 +135,12 @@ public class Project {
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
-	public void setProfit(double profit) {
-		this.profit = profit;
-	}
 	public void setTypeIndex(int typeIndex) {
 		this.typeIndex = typeIndex; 
 	}
 	public String toString() { 
 		return name; 
 	}
-
 	
 	private static double calculateCost(ArrayList<Material> materials) {
 		double cost = 0.0;
