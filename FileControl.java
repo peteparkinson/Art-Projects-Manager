@@ -7,6 +7,7 @@
  * 
  ************************************************/
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class FileControl {
 	
@@ -32,15 +35,13 @@ public class FileControl {
 
 		BufferedWriter bw = null;
 		FileWriter writer = null;
-		File f = new File(
-				materialsPath + "\\" + m.getName() + ".txt");
+		File f = new File(materialsPath + "\\" + m.getName() + ".txt");
 		  
 		//Create the file
-		if (f.createNewFile())
-		{
-		    System.out.println("File is created");
+		if (f.createNewFile()) {
+		    System.out.println(m + " File is created");
 		} else {
-		    System.out.println("File already exists");
+		    System.out.println(m + " File already exists");
 		}
 		 
 		writer = new FileWriter(f);
@@ -80,9 +81,9 @@ public class FileControl {
 		  
 		//Create the file
 		if (f.createNewFile()) {
-		    System.out.println(f + " file is created");
+		    System.out.println(c + " file is created");
 		} else {
-		    System.out.println(f + " file already exists");
+		    System.out.println(c + " file already exists");
 		}
 		 
 		writer = new FileWriter(f);
@@ -116,9 +117,9 @@ public class FileControl {
 		  
 		//Create the file
 		if (f.createNewFile()) {
-		    System.out.println(f + " file is created");
+		    System.out.println(p + " file is created");
 		} else {
-		    System.out.println(f + " file already exists");
+		    System.out.println(p + " file already exists");
 		}
 		 
 		writer = new FileWriter(f);
@@ -132,6 +133,9 @@ public class FileControl {
 		 *  - customer
 		 *  - notes
 		 *  - openStatus
+		 *  - hours
+		 *  - charge
+		 *  - finished status
 		 *  - materials
 		 */
 
@@ -148,6 +152,10 @@ public class FileControl {
 		bw.write(String.valueOf(p.getOpenStatus()));
         bw.newLine();
 		bw.write(String.valueOf(p.getHours()));
+        bw.newLine();
+		bw.write(String.valueOf(p.getCharge()));
+        bw.newLine();
+		bw.write(String.valueOf(p.getFinishedStatus()));
 		for(int i = 0; i < p.getMaterials().size(); i++) {
 			bw.newLine();
 			bw.write(p.getMaterials().get(i).getName());
@@ -156,6 +164,62 @@ public class FileControl {
 		
 	}
 
+	public static void createInvoiceFile(Project p) throws IOException{
+
+		BufferedWriter bw = null;
+		FileWriter writer = null;
+		File f = new File(invoicesPath + "\\" + p.getName() + ".txt");
+		  
+		//Create the file
+		if (f.createNewFile()) {
+		    System.out.println(p + " Invoice is created");
+		} else {
+		    System.out.println(p + " Invoice already exists");
+		}
+		 
+		writer = new FileWriter(f);
+		bw = new BufferedWriter(writer);
+	    Date today = Calendar.getInstance().getTime();
+	    String message = GUI.ITMessageArea.getText();
+
+		/*****************************
+		 * Write content by line:
+		 *  - Business name
+		 *  - today's date
+		 *  - customer's name
+		 *  - customer's address
+		 *  - project name
+		 *  - qty 1
+		 *  - $ charge
+		 *  - message
+		 */
+
+		bw.write("Eluna Mae Arts");
+        bw.newLine();
+		bw.write(String.valueOf(today));
+        bw.newLine();
+		bw.write(p.getCustomer().getName());
+        bw.newLine();
+		bw.write(p.getCustomer().getAddress());
+        bw.newLine();
+		bw.write(p.getName());
+        bw.newLine();
+		bw.write("Qty: 1");
+        bw.newLine();
+		bw.write("$" + String.valueOf(p.getCharge()));
+        bw.newLine();
+		bw.write(message);
+		bw.close();
+		
+		//open file in notepad
+		if (Desktop.isDesktopSupported()) {
+		    Desktop.getDesktop().edit(f);
+		} else {
+		    // dunno, up to you to handle this
+		}
+		
+	}
+	
 	public static boolean directoryContainsFile(Path path, String fileName) {
 		File folder = new File(String.valueOf(path));
 		File[] listOfFiles = folder.listFiles();
@@ -262,11 +326,10 @@ public class FileControl {
 					System.out.println("Cannot read from file " + file);
 					e.printStackTrace();
 				}
-				//display global materials list on GUI lists
-
-				Action.updateCustList(GUI.customersModel, ListData.customers);
 		    }
 		}
+		//display global materials list on GUI lists
+		Action.updateCustList(GUI.customersModel, ListData.customers);
 	}
 	
 	//loads material files into RAM, displays on GUI lists
@@ -293,6 +356,8 @@ public class FileControl {
 					  *  - notes
 					  *  - openStatus
 					  *  - hours
+					  *  - charge
+					  *  - finished status
 					  *  - materials
 					 *********************/
 					 
@@ -325,12 +390,22 @@ public class FileControl {
 					p.setOpenStatus(status);
 					line = br.readLine();
 					p.setHours(Integer.parseInt(line));
+					line = br.readLine();
+					p.setCharge(Double.parseDouble(line));
+					line = br.readLine();
+					if(line.equals("false")) {
+						p.setFinishedStatus(false);
+					} else {
+						p.setFinishedStatus(true);
+					}
 					Material m;
 					while ((line = br.readLine()) != null) {
 						for(int i = 0; i < ListData.materials.size(); i++) {
 							m = ListData.materials.get(i);
 							if(String.valueOf(ListData.materials.get(i)).equals(line)) {
-								m.useOne();
+								if(status) {
+									m.useOne();
+								}
 								p.addMaterial(m);
 							}
 						}
@@ -351,14 +426,12 @@ public class FileControl {
 					System.out.println("Cannot read from file " + file);
 					e.printStackTrace();
 				}
-				//display global materials list on GUI lists
-				if(p.getOpenStatus()) {
-					Action.updateProList(GUI.openProModel, ListData.openProjects);
-				} else {
-					Action.updateProList(GUI.closedProModel, ListData.closedProjects);
-				}
 		    }
 		}
+		//display global materials list on GUI lists
+		Action.updateProList(GUI.openProModel, ListData.openProjects);
+		Action.updateProList(GUI.closedProModel, ListData.closedProjects);
+		
 	}
 
 
@@ -476,12 +549,6 @@ public class FileControl {
 
 		    }
 		}
-		
-	}
-	
-	public static void closeProFile(Project p) {
-
-		//TODO
 		
 	}
 	
