@@ -116,10 +116,18 @@ public class Material {
 	public void setQtyInUse(int qtyInUse) { 
 		this.qtyInUse = qtyInUse; 
 	}
-	public void ignoreUse() {
+	public void returnOne() {
 		this.qtyInUse--;
 	}
 	public void useOne() {
+		this.qtyInUse++;
+	}
+	public void closeOne() {
+		this.qtyOnHand--;
+		this.qtyInUse--;
+	}
+	public void openOne() {
+		this.qtyOnHand++;
 		this.qtyInUse++;
 	}
 	public void setExtCost(double extCost) { 
