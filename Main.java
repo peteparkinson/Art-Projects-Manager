@@ -62,18 +62,6 @@ public class Main {
                 new GUI().setVisible(true);
             }
         });
-        
-        /*
-	      //get current date time with Date()
-	        Date date = new Date();
-	        System.out.println(dateFormat.format(date));
-	        jTextField3.setText(dateFormat.format(date));
-	     get current date time with Calendar()
-	
-	     //get current date time with Calendar()
-	        Calendar cal = Calendar.getInstance();
-	        jTextField3.setText(dateFormat.format(cal.getTime()));
-	    */
 		
 	}
 }
