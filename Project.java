@@ -1,10 +1,10 @@
 /************************************************
- * Material.java
+ * Project.java
  * 11-16-2018
  * Pete Parkinson
  * 
  * this file creates a "project" object such as
- * "wood burning 
+ * "wood burning"
  * each material must be defined by the user.
  * 
  * each project tracks:
@@ -25,15 +25,17 @@ import java.util.ArrayList;
 public class Project {
 
 	public static final double hourlyRate = 5.0;
-	public static final double markup = 2.0;
+	public static final double markup = 1.5;
 
 	private String serial;
 	private Customer customer;
 	private String name;
 	private String notes;
 	private boolean openStatus;
+	private boolean finished;
 	private ArrayList<Material> materials = new ArrayList<Material>();
 	private int hours;
+	private double charge;
 	private int typeIndex;
 	
 	//default constructor
@@ -63,6 +65,8 @@ public class Project {
 		this.materials = materials;
 		this.openStatus = true;
 		this.hours = 0;
+		this.charge = -0.01;
+		this.finished = false;
 	}
 
 	//getters
@@ -90,20 +94,40 @@ public class Project {
 	public int getTypeIndex() {
 		return typeIndex;
 	}
-	public String getCOM() {
-		return String.valueOf(Math.floor(calculateCost(materials)));
+	public String getCOMstr() {
+		return String.valueOf(Math.round(calculateCost(materials) * 100.0) / 100.0);
+	}
+	public Double getCOM() {
+		return (double) Math.round(calculateCost(materials) * 100.0 / 100.0);
 	}
 	public String getTotal() {
-		return String.valueOf(Math.floor(calculateCost(materials) + (hours * hourlyRate)));
+		double num = calculateCost(materials) + (hours * hourlyRate);
+		return String.valueOf(Math.round(num * 100.0) / 100.0);
 	}
-	public String getCharge() {
-		return String.valueOf(Math.floor((calculateCost(materials) + (hours * hourlyRate)) * markup));
+	public Double getCharge() {
+		
+		
+		if(this.charge == -0.01){
+			double chrg = calculateCost(materials) + (hours * hourlyRate) * markup;
+			chrg = Math.round(chrg * 100.0) / 100.0;
+			return chrg;
+		} else {
+			return Math.round(charge * 100.0) / 100.0;
+		}
 	}
-	public String getNet() {
-		return String.valueOf(Math.floor((calculateCost(materials) + (hours * hourlyRate)) * markup) - 
-				Math.floor(calculateCost(materials) + (hours * hourlyRate)));
+	public String getChargeStr() {
+		if(this.charge == -0.01){
+			double chrg = calculateCost(materials) + (hours * hourlyRate) * markup;
+			chrg = Math.round(chrg * 100.0) / 100.0;
+			return String.valueOf(chrg);
+		} else {
+			return String.valueOf(Math.round(charge * 100.0) / 100.0);
+		}
 	}
-
+	public boolean getFinishedStatus() {
+		return finished;
+	}
+	
 	//setters
 	public void setOpenStatus(boolean openStatus) {
 		this.openStatus = openStatus;
@@ -135,11 +159,20 @@ public class Project {
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
+	public void setCharge(double charge) {
+		this.charge = charge;
+	}
+	public void resetCharge() {
+		this.charge = (calculateCost(materials) + (hours * hourlyRate)) * markup;
+	}
 	public void setTypeIndex(int typeIndex) {
 		this.typeIndex = typeIndex; 
 	}
 	public String toString() { 
 		return name; 
+	}
+	public void setFinishedStatus(boolean fin) {
+		this.finished = fin;
 	}
 	
 	private static double calculateCost(ArrayList<Material> materials) {
