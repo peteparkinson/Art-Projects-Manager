@@ -5,7 +5,7 @@ public class GUI extends JFrame {
 
     public GUI() {
         initComponents();
-    }
+    } 
                       
 	private void initComponents() {
 
