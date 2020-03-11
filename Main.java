@@ -1,12 +1,12 @@
 /************************************************
  * Main.java
- * 11-16-2018
+ * 3-11-20
  * Pete Parkinson
  * 
  * this file instantiates GUI.java 
  * 
  * main class for simple inventory tracking system
- * intended to be used for wife's arts and crafts
+ * intended to be used for arts and crafts
  * projects.
  * 
  * each material created tracks cost, ext. cost, 
