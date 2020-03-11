@@ -1,4 +1,4 @@
-inventory control system for wifes art projects
+inventory control system for art projects
 
 ![image](https://user-images.githubusercontent.com/43157092/50621709-9b6dd480-0ed5-11e9-8df7-406eeae3f9b3.png)
 
