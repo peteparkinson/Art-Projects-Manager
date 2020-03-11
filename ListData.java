@@ -1,7 +1,6 @@
 /**
  * This file controls the lists found in the app, when and what data
  * gets loaded
- *
  */
 
 import java.util.ArrayList;
